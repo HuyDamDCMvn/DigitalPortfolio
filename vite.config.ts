@@ -11,9 +11,6 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
-// Vercel CI sets VERCEL=1. Nitro is required for vinext → Vercel deploys.
-const isVercel = process.env.VERCEL === "1" || process.env.NITRO_PRESET === "vercel";
-
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -36,8 +33,13 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig(async () => {
-  if (isVercel) {
+export default defineConfig(async ({ command }) => {
+  // Nitro only for production builds on Vercel — keep Cloudflare for local `vinext dev`.
+  const useNitro =
+    command === "build" &&
+    (process.env.VERCEL === "1" || process.env.NITRO_PRESET === "vercel");
+
+  if (useNitro) {
     const { nitro } = await import("nitro/vite");
     const tailwindcss = (await import("@tailwindcss/vite")).default;
     return {
@@ -55,10 +57,39 @@ export default defineConfig(async () => {
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
   return {
-    server: isCodexSeatbeltSandbox
-      ? { watch: { useFsEvents: false, usePolling: true } }
-      : undefined,
+    server: {
+      host: "127.0.0.1",
+      port: 3001,
+      ...(isCodexSeatbeltSandbox
+        ? { watch: { useFsEvents: false, usePolling: true } }
+        : {}),
+    },
     plugins: [
+      // Cursor's embedded browser sends cross-site no-cors Sec-Fetch headers;
+      // vinext blocks those and the preview stays blank.
+      {
+        name: "allow-cursor-browser-preview",
+        configureServer(server) {
+          server.middlewares.use((req, _res, next) => {
+            const site = req.headers["sec-fetch-site"];
+            const mode = req.headers["sec-fetch-mode"];
+            if (site === "cross-site" && mode === "no-cors") {
+              req.headers["sec-fetch-site"] = "same-origin";
+              req.headers["sec-fetch-mode"] = "navigate";
+            }
+            const origin = req.headers.origin;
+            if (
+              typeof origin === "string" &&
+              (origin.startsWith("vscode-") ||
+                origin.startsWith("cursor-") ||
+                origin === "null")
+            ) {
+              delete req.headers.origin;
+            }
+            next();
+          });
+        },
+      },
       vinext(),
       sites(),
       cloudflare({

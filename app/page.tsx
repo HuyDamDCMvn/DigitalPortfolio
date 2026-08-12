@@ -70,6 +70,41 @@ const munichSteps = [
   "Clean up and submit",
 ];
 
+const storyChapters = [
+  {
+    code: "01",
+    title: "Close to delivery",
+    line: "Operations reviews and manual checks still sat next to day-to-day project work.",
+    cue: "Manual → Digital",
+    image: "/images/story-01-delivery.png",
+    imageAlt: "A digital coordinator reviewing operations and manual tests at a desk",
+  },
+  {
+    code: "02",
+    title: "A team takes shape",
+    line: "BIM knowledge and coding skill gather into a shared Digital Team practice.",
+    cue: "Learn · BIM · Code",
+    image: "/images/story-02-team.png",
+    imageAlt: "The Digital Team learning BIM and coding together",
+  },
+  {
+    code: "03",
+    title: "More voices join",
+    line: "Coordinators and technical contributors widen coverage across projects.",
+    cue: "Capability grows",
+    image: "/images/story-03-voices.png",
+    imageAlt: "More team members joining the growing Digital Team",
+  },
+  {
+    code: "04",
+    title: "Connected leadership",
+    line: "Digital Lead aligns MEP, structure and architecture through one working view.",
+    cue: "MEP · Structure · Architecture",
+    image: "/images/story-04-lead.png",
+    imageAlt: "Digital Lead connecting MEP, structure and architecture in one view",
+  },
+];
+
 function SectionHeading({
   eyebrow,
   title,
@@ -125,14 +160,6 @@ export default function Home() {
           <div className="hero-image-frame">
             <img src="/images/hero-system.png" alt="Connected building-services system visual from the team presentation" />
           </div>
-          <div className="floating-card floating-card-top">
-            <span className="mini-label">Our role</span>
-            <strong>Make digital delivery usable.</strong>
-          </div>
-          <div className="floating-card floating-card-bottom">
-            <span className="signal-dot" />
-            <span>People + process + data</span>
-          </div>
         </div>
         <div className="hero-index" aria-hidden="true">01</div>
       </section>
@@ -145,10 +172,28 @@ export default function Home() {
             text="The presentation traces a simple evolution: start close to project delivery, build shared capability, and connect that capability through digital leadership."
           />
           <div className="story-layout">
-            <figure className="source-visual source-visual-story">
-              <img src="/images/team-story.png" alt="Digital Team growth story from the source presentation" loading="lazy" />
-              <figcaption>Team growth as shown in the source presentation</figcaption>
-            </figure>
+            <div className="story-retell" aria-label="Team growth told as four connected chapters">
+              <p className="story-retell-kicker">Story retelling</p>
+              <ol className="story-retell-path">
+                {storyChapters.map((chapter, index) => (
+                  <li key={chapter.code} className="story-retell-chapter">
+                    <div className="story-retell-mark" aria-hidden="true">
+                      <span>{chapter.code}</span>
+                      {index < storyChapters.length - 1 ? <i /> : null}
+                    </div>
+                    <article>
+                      <div className="story-retell-figure">
+                        <img src={chapter.image} alt={chapter.imageAlt} loading="lazy" />
+                      </div>
+                      <p className="story-retell-cue">{chapter.cue}</p>
+                      <h3>{chapter.title}</h3>
+                      <p>{chapter.line}</p>
+                    </article>
+                  </li>
+                ))}
+              </ol>
+              <p className="story-retell-end">From one embedded role to a connected Digital Lead view.</p>
+            </div>
             <ol className="timeline">
               {timeline.map((item, index) => (
                 <li key={item.step}>
@@ -186,9 +231,14 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <figure className="coordinator-visual">
-            <img src="/images/coordinator-role.png" alt="Digital Coordinator roles: initial setup, QA/QC audit, automation support and special-case support" loading="lazy" />
-          </figure>
+          <div className="coordinator-visuals">
+            <figure className="coordinator-visual">
+              <img src="/images/coordinator-role.png" alt="Digital Coordinator roles: initial setup, QA/QC audit, automation support and special-case support" loading="lazy" />
+            </figure>
+            <figure className="coordinator-visual">
+              <img src="/images/digital-coordinator.png" alt="Digital Coordinator connecting data across building-services systems" loading="lazy" />
+            </figure>
+          </div>
         </div>
       </section>
 
