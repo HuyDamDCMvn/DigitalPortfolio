@@ -11,6 +11,9 @@ const { d1, r2 } = hostingConfig;
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
+// Vercel CI sets VERCEL=1. Nitro is required for vinext → Vercel deploys.
+const isVercel = process.env.VERCEL === "1" || process.env.NITRO_PRESET === "vercel";
+
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -34,6 +37,14 @@ const localBindingConfig = {
 };
 
 export default defineConfig(async () => {
+  if (isVercel) {
+    const { nitro } = await import("nitro/vite");
+    const tailwindcss = (await import("@tailwindcss/vite")).default;
+    return {
+      plugins: [vinext(), tailwindcss(), sites(), nitro()],
+    };
+  }
+
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= "false";
