@@ -19,7 +19,7 @@ export function StoryRetell({ chapters }: { chapters: StoryChapter[] }) {
     <>
       <div className="story-retell" aria-label="Team growth told as four connected chapters">
         <p className="story-retell-kicker">Story retelling</p>
-        <ol className="story-retell-path">
+              <ol className="story-retell-path" data-animate-stagger>
           {chapters.map((chapter) => (
             <li key={chapter.code} className="story-retell-chapter">
               <article>

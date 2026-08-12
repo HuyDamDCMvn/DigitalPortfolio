@@ -1,4 +1,5 @@
 import { AutomationToolList } from "./automation-tools";
+import { PageMotion } from "./page-motion";
 import { StoryRetell } from "./story-retell";
 import { WorkflowMap } from "./workflow-map";
 import { ZoomableImage } from "./zoomable-image";
@@ -102,6 +103,7 @@ function SectionHeading({
 
 export default function Home() {
   return (
+    <PageMotion>
     <main>
       <header className="site-header">
         <a
@@ -175,7 +177,7 @@ export default function Home() {
               title="The bridge between project needs and repeatable digital delivery."
               text="The coordinator keeps the digital layer practical: setting up the project, auditing quality, supporting automation and helping teams solve special cases."
             />
-            <div className="role-list">
+            <div className="role-list" data-animate-stagger>
               {[
                 ["01", "Initial setup", "Translate requirements into a usable project starting point."],
                 ["02", "QA/QC audit", "Review models and families against agreed rules and checklists."],
@@ -189,7 +191,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className="coordinator-visuals">
+          <div className="coordinator-visuals" data-animate-stagger>
             <figure className="coordinator-visual">
               <img src="/images/coordinator-role.png" alt="Digital Coordinator roles: initial setup, QA/QC audit, automation support and special-case support" loading="lazy" />
             </figure>
@@ -207,7 +209,7 @@ export default function Home() {
             title="A practical digital layer across the project lifecycle."
             text="Our work spans standards, learning, tools and data—designed to stay connected to real delivery needs."
           />
-          <div className="capability-grid">
+          <div className="capability-grid" data-animate-stagger>
             {capabilities.map((item) => (
               <article className="capability-card" key={item.code}>
                 <span className="capability-code">{item.code}</span>
@@ -227,7 +229,7 @@ export default function Home() {
             title="Build capability, then make it reusable."
             text="The team’s training material combines structured sessions, working examples and focused user guides."
           />
-          <div className="training-grid">
+          <div className="training-grid" data-animate-stagger>
             <article className="training-feature">
               <div className="training-title"><span>D</span><div><p>Learning path</p><h3>Dynamo</h3></div></div>
               <ol>
@@ -239,7 +241,18 @@ export default function Home() {
               </ol>
             </article>
             <article className="training-feature training-feature-light">
-              <div className="training-title"><span>R</span><div><p>Skills matrix</p><h3>Revit</h3></div></div>
+              <div className="training-title">
+                <a
+                  className="training-mark"
+                  href="https://rfa.dcm-vn.com/home"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Open Revit Family App"
+                >
+                  R
+                </a>
+                <div><p>Skills matrix</p><h3>Revit</h3></div>
+              </div>
               <div className="skill-cloud">
                 {['Documentation','Worksharing','Families','Management','Modeling','Parameters','Views'].map((skill) => <span key={skill}>{skill}</span>)}
               </div>
@@ -270,7 +283,7 @@ export default function Home() {
             />
             <AutomationToolList />
           </div>
-          <figure className="automation-visual">
+          <figure className="automation-visual" data-animate>
             <ZoomableImage
               className="automation-visual-zoom"
               src="/images/automation-tools.png"
@@ -289,7 +302,7 @@ export default function Home() {
             title="Turn project data into a working view."
             text="The source deck shows three reporting layers: team and task views in Tableau, digital productivity reporting, and Revit model dashboards."
           />
-          <div className="visual-gallery">
+          <div className="visual-gallery" data-animate-stagger>
             <figure className="visual-card visual-card-wide">
               <img src="/images/tableau-overview.png" alt="Tableau time tracking dashboard from the presentation" loading="lazy" />
               <figcaption><span>01</span><div><strong>Tableau overview</strong><p>Time and project activity in one view.</p></div></figcaption>
@@ -326,13 +339,15 @@ export default function Home() {
             title="A connected path from project setup to validated information."
             text="The presentation frames digital delivery as a sequence of reviewable processes, each with clear inputs, tasks and outputs."
           />
-          <WorkflowMap />
+          <div data-animate>
+            <WorkflowMap />
+          </div>
         </div>
       </section>
 
       <section className="case-study section section-dark" id="case-study">
         <div className="section-shell">
-          <div className="case-intro">
+          <div className="case-intro" data-animate>
             <div>
               <p className="eyebrow">Case study · Munich RE</p>
               <h2>Taboo Zone validation as a coordinated, reviewable workflow.</h2>
@@ -342,7 +357,7 @@ export default function Home() {
               comparison reporting, Taboo Zone massing, quantity and tolerance checks, feedback loops and final submission.
             </p>
           </div>
-          <figure className="case-workflow">
+          <figure className="case-workflow" data-animate>
             <ZoomableImage
               className="case-workflow-zoom"
               src="/images/munich-workflow.png"
@@ -350,10 +365,10 @@ export default function Home() {
               title="Workflow for TBZ Validation"
             />
           </figure>
-          <ol className="case-steps">
+          <ol className="case-steps" data-animate-stagger>
             {munichSteps.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, '0')}</span>{step}</li>)}
           </ol>
-          <div className="case-gallery">
+          <div className="case-gallery" data-animate-stagger>
             <figure className="case-gallery-large"><img src="/images/munich-models.png" alt="Munich RE model views for existing and new construction" loading="lazy" /><figcaption>Coordinated model views</figcaption></figure>
             <figure><img src="/images/munich-comparison.png" alt="ARC comparison views used in the Munich RE case study" loading="lazy" /><figcaption>Comparison setup</figcaption></figure>
             <figure><img src="/images/munich-validation.png" alt="IDS validation summary shown in the presentation" loading="lazy" /><figcaption>Validation summary</figcaption></figure>
@@ -367,7 +382,7 @@ export default function Home() {
 
       <section className="contact section" id="contact">
         <div className="contact-glow" />
-        <div className="section-shell contact-inner">
+        <div className="section-shell contact-inner" data-animate>
           <p className="eyebrow">Start a conversation</p>
           <h2>Bring the Digital Team in early.</h2>
           <p>For project setup, workflow reviews, training or automation support, connect with the team through your existing project channel.</p>
@@ -384,5 +399,6 @@ export default function Home() {
         <p>Internal presentation</p>
       </footer>
     </main>
+    </PageMotion>
   );
 }

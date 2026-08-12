@@ -16,8 +16,15 @@
   --content-max: 1680px;
 }
 
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+.page-motion {
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-motion * {
+    scroll-behavior: auto !important;
+  }
+}
 body {
   margin: 0;
   background: var(--paper);
@@ -373,7 +380,29 @@ main {
 .training-feature { background: var(--navy); color: white; }
 .training-feature-light { background: #dff3fa; color: var(--ink); }
 .training-title { display: flex; align-items: center; gap: 18px; margin-bottom: 34px; }
-.training-title > span { width: 54px; height: 54px; display: grid; place-items: center; border-radius: 14px; background: var(--cyan); color: var(--navy-deep); font-size: 25px; font-weight: 900; }
+.training-title > span,
+.training-title > .training-mark {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--cyan);
+  color: var(--navy-deep);
+  font-size: 25px;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.training-title > .training-mark:hover,
+.training-title > .training-mark:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(3,23,51,.18);
+}
+.training-title > .training-mark:focus-visible {
+  outline: 2px solid var(--navy-deep);
+  outline-offset: 2px;
+}
 .training-title p { margin: 0 0 3px; color: rgba(255,255,255,.58); font-size: 11px; text-transform: uppercase; letter-spacing: .13em; }
 .training-feature-light .training-title p { color: var(--muted); }
 .training-title h3 { margin: 0; font-size: 30px; letter-spacing: -.03em; }

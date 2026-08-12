@@ -41,7 +41,15 @@ const tools = [
       code: "05",
     },
   },
-  { label: "Assess model performance" },
+  {
+    label: "Avoid Clash",
+    demo: {
+      src: "/images/avoid-clash.gif",
+      alt: "Animation of the Avoid Clash MEP reroute tool",
+      title: "Avoid Clash",
+      code: "06",
+    },
+  },
 ] as const;
 
 type ToolDemo = {
