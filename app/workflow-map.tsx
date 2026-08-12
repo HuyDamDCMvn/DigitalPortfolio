@@ -27,6 +27,7 @@ const stages = [
     image: "/images/ifc-platform.png",
     imageAlt: "IFC health check platform view",
     caption: "IFC health and validation",
+    href: "https://ifc.dcm-vn.com/",
   },
 ] as const;
 
@@ -73,10 +74,24 @@ export function WorkflowMap() {
             title={selected.caption}
             code={selected.number}
           />
-          <figcaption>
-            <span>{selected.number}</span>
-            {selected.caption}
-          </figcaption>
+          {"href" in selected && selected.href ? (
+            <figcaption>
+              <a
+                href={selected.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${selected.caption}`}
+              >
+                <span>{selected.number}</span>
+                {selected.caption}
+              </a>
+            </figcaption>
+          ) : (
+            <figcaption>
+              <span>{selected.number}</span>
+              {selected.caption}
+            </figcaption>
+          )}
         </figure>
       ) : null}
     </>
