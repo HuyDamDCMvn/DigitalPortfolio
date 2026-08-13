@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ZoomableImage } from "./zoomable-image";
+import { WorkflowVisual3D } from "./workflow-visual-3d";
 
 const stages = [
   {
@@ -33,8 +33,11 @@ const stages = [
 
 export function WorkflowMap() {
   const [active, setActive] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
   const panelId = useId();
   const selected = active === null ? null : stages[active];
+  const hoverPreview =
+    selected !== null && hovered !== null && hovered !== active;
 
   return (
     <>
@@ -49,6 +52,8 @@ export function WorkflowMap() {
               aria-expanded={isActive}
               aria-controls={panelId}
               onClick={() => setActive(isActive ? null : index)}
+              onPointerEnter={() => setHovered(index)}
+              onPointerLeave={() => setHovered((h) => (h === index ? null : h))}
             >
               <span className="workflow-number">{stage.number}</span>
               <div>
@@ -67,12 +72,19 @@ export function WorkflowMap() {
 
       {selected ? (
         <figure className="workflow-detail" id={panelId}>
-          <ZoomableImage
-            className="workflow-detail-zoom"
-            src={selected.image}
-            alt={selected.imageAlt}
-            title={selected.caption}
-            code={selected.number}
+          <WorkflowVisual3D
+            src={
+              hoverPreview && hovered !== null
+                ? stages[hovered].image
+                : selected.image
+            }
+            alt={
+              hoverPreview && hovered !== null
+                ? stages[hovered].imageAlt
+                : selected.imageAlt
+            }
+            pulseKey={hoverPreview && hovered !== null ? hovered : active ?? 0}
+            hoverPreview={hoverPreview}
           />
           {"href" in selected && selected.href ? (
             <figcaption>

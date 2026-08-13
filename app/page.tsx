@@ -1,4 +1,5 @@
 import { AutomationToolList } from "./automation-tools";
+import { HeroVisual3D } from "./hero-visual-3d";
 import { PageMotion } from "./page-motion";
 import { StoryRetell } from "./story-retell";
 import { WorkflowMap } from "./workflow-map";
@@ -149,9 +150,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual" aria-label="Connected digital engineering system">
-          <div className="hero-image-frame">
-            <img src="/images/hero-system.png" alt="Connected building-services system visual from the team presentation" />
-          </div>
+          <HeroVisual3D />
         </div>
         <div className="hero-index" aria-hidden="true">01</div>
       </section>

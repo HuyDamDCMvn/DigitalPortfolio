@@ -36,6 +36,20 @@ const eslintConfig = defineConfig([
       },
     },
   },
+  {
+    files: [
+      "app/r3f/**/*.{ts,tsx}",
+      "app/lab/r3f/**/*.{ts,tsx}",
+      "app/hero-visual-3d.tsx",
+      "app/workflow-visual-3d.tsx",
+    ],
+    rules: {
+      // R3F / drei pass Three.js props through JSX.
+      "react/no-unknown-property": "off",
+      "@next/next/no-img-element": "off",
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
