@@ -1,0 +1,536 @@
+{
+  "groups": [
+    {
+      "id": "modeling",
+      "name": "Modeling",
+      "skills": [
+        {
+          "id": "modeling-1",
+          "n": 1,
+          "text": "Use the basic tools: Move, Copy, Cut, Paste, Rotate, Align, Split & Trim, Array, Scale, Offset, etc... when modeling"
+        },
+        {
+          "id": "modeling-2",
+          "n": 2,
+          "text": "Use the basic drawing tools: Line, Rectangle, Circle, Arc, Spline, Pick line, etc... when modeling"
+        },
+        {
+          "id": "modeling-3",
+          "n": 3,
+          "text": "Understand & use Work plane for modeling"
+        },
+        {
+          "id": "modeling-4",
+          "n": 4,
+          "text": "Create and modify datum: Grids and Levels, Annotation symbol, Detail Items,...(2D)"
+        },
+        {
+          "id": "modeling-5",
+          "n": 5,
+          "text": "Use and modify system families: Pipe/Parallel Pipes/Flex Pipe/Duct/Flex Duct/Cable Tray/Conduit"
+        },
+        {
+          "id": "modeling-6",
+          "n": 6,
+          "text": "Add or Remove Element to Electric Circuit/Duct System/Pipe System"
+        },
+        {
+          "id": "modeling-7",
+          "n": 7,
+          "text": "Place and modify loadable families: Mechanical/Electrical Equipment, Lighting , Air Terminal, Duct/Pipe Accessory..."
+        },
+        {
+          "id": "modeling-8",
+          "n": 8,
+          "text": "Load and modify Duct Fitting, Pipe Fitting, Cable Tray Fitting to Routing Preferences"
+        },
+        {
+          "id": "modeling-9",
+          "n": 9,
+          "text": "Control and configuation Duct/Pipe Sizing"
+        },
+        {
+          "id": "modeling-10",
+          "n": 10,
+          "text": "Set up and control to create Duct/Pipe Pressure Loss Report"
+        },
+        {
+          "id": "modeling-11",
+          "n": 11,
+          "text": "Place and control Space and Zone data for MEP calculation"
+        },
+        {
+          "id": "modeling-12",
+          "n": 12,
+          "text": "Understand, set up and control Energy Optimizition (System-Zone, Create Energy Model, System Ananlysis, Generate,Optimize)"
+        },
+        {
+          "id": "modeling-13",
+          "n": 13,
+          "text": "Create and control the Massing and Model Site (Toposurface)"
+        },
+        {
+          "id": "modeling-14",
+          "n": 14,
+          "text": "Understand & use Change Type when modeling"
+        },
+        {
+          "id": "modeling-15",
+          "n": 15,
+          "text": "Add/Remove & modify Insulation"
+        },
+        {
+          "id": "modeling-16",
+          "n": 16,
+          "text": "Create and edit Model Groups, Save and load Model Groups"
+        }
+      ]
+    },
+    {
+      "id": "elements",
+      "name": "Elements",
+      "skills": [
+        {
+          "id": "elements-1",
+          "n": 1,
+          "text": "Understand Model elements, Datum elements, View-specific elements"
+        },
+        {
+          "id": "elements-2",
+          "n": 2,
+          "text": "Assign and modify Materials for Elements (Graphic w/Surface Pattern, Cut pattern, Appearance,...)"
+        },
+        {
+          "id": "elements-3",
+          "n": 3,
+          "text": "Create and modify Assemblies for layout & make drawing detail"
+        },
+        {
+          "id": "elements-4",
+          "n": 4,
+          "text": "Use the Selection Filter, Isolate Category/Element, Hide Category/Element, Unhide Category/Element in view"
+        },
+        {
+          "id": "elements-5",
+          "n": 5,
+          "text": "Copy selected elements to Picked/Selected Level, Same place, Current/Selected view..."
+        },
+        {
+          "id": "elements-6",
+          "n": 6,
+          "text": "Add elements to corresponding Project Phase"
+        },
+        {
+          "id": "elements-7",
+          "n": 7,
+          "text": "Add elements to corresponding Design Option"
+        },
+        {
+          "id": "elements-8",
+          "n": 8,
+          "text": "Add elements to corresponding Workset"
+        },
+        {
+          "id": "elements-9",
+          "n": 9,
+          "text": "Split Duct/Pipe/Cable Tray/Conduit"
+        },
+        {
+          "id": "elements-10",
+          "n": 10,
+          "text": "Connect elements by Connector (Setup, Locate, Control)"
+        },
+        {
+          "id": "elements-11",
+          "n": 11,
+          "text": "Control Parameter of Space/Zone"
+        }
+      ]
+    },
+    {
+      "id": "families",
+      "name": "Families",
+      "skills": [
+        {
+          "id": "families-1",
+          "n": 1,
+          "text": "Understand System Family, Loadable Family and In-place Family"
+        },
+        {
+          "id": "families-2",
+          "n": 2,
+          "text": "Load families between projects & Seed files (DCMvn_Family library)"
+        },
+        {
+          "id": "families-3",
+          "n": 3,
+          "text": "Duplicate and modify a new type of system family:  Pipe/Parallel Pipes/Flex Pipe/Duct/Flex Duct/Cable Tray/Conduit"
+        },
+        {
+          "id": "families-4",
+          "n": 4,
+          "text": "Create and modify a new loadable families (Place type): for Mechanical / Electrical / Plumbing / Fire Fighting"
+        },
+        {
+          "id": "families-5",
+          "n": 5,
+          "text": "Create and modify a new loadable families (Attached type): Duct/Pipe Fitting, Duct/Pipe Accessory, Cable Tray Fitting"
+        },
+        {
+          "id": "families-6",
+          "n": 6,
+          "text": "Place and modify a Connector for Duct/Pipe/Electrical/Cable Tray/Conduit"
+        },
+        {
+          "id": "families-7",
+          "n": 7,
+          "text": "Family creation: Use Reference Line & Planes"
+        },
+        {
+          "id": "families-8",
+          "n": 8,
+          "text": "Family creation: Use Form Geometry tool: Extrusion, Sweep, Blend, Sweep, Revolve, Swept Blend, Void"
+        },
+        {
+          "id": "families-9",
+          "n": 9,
+          "text": "Family creation: Understand and use Family and Shared Parameter"
+        },
+        {
+          "id": "families-10",
+          "n": 10,
+          "text": "Family creation: Use Parameter Type & Instance"
+        },
+        {
+          "id": "families-11",
+          "n": 11,
+          "text": "Family creation: Use Materials in families"
+        },
+        {
+          "id": "families-12",
+          "n": 12,
+          "text": "Family creation: Modify Family category"
+        },
+        {
+          "id": "families-13",
+          "n": 13,
+          "text": "Family creation: Create and Use Sub-category in family"
+        },
+        {
+          "id": "families-14",
+          "n": 14,
+          "text": "Family creation: Use Revit Formula, lookup table in family"
+        },
+        {
+          "id": "families-15",
+          "n": 15,
+          "text": "Family creation: Understand hosted and non-hosted family template"
+        },
+        {
+          "id": "families-16",
+          "n": 16,
+          "text": "Family creation: Work with Nested & Shared Family"
+        },
+        {
+          "id": "families-17",
+          "n": 17,
+          "text": "Family creation: Setting up Graphic/Visibility included: Yes/No Parameter, Detail Level, Floor view, Elevation View, etc.."
+        },
+        {
+          "id": "families-18",
+          "n": 18,
+          "text": "Family creation: Create and edit Annotate in Family: Symbolic Line, Detail Component, Detail Group, Symbol, Masking Region)"
+        },
+        {
+          "id": "families-19",
+          "n": 19,
+          "text": "Family creation: Associate parameters: Constrain, Flex, Lock, Align and Labels"
+        }
+      ]
+    },
+    {
+      "id": "views",
+      "name": "Views",
+      "skills": [
+        {
+          "id": "views-1",
+          "n": 1,
+          "text": "Create View (New, Duplicate with Detailing/as a Dependent )"
+        },
+        {
+          "id": "views-2",
+          "n": 2,
+          "text": "Working with Schedules (Drawing List, Equipment schedule, Electrical Panel Schedule...)"
+        },
+        {
+          "id": "views-3",
+          "n": 3,
+          "text": "Working with Linked Model (Workset from Linked Model, Display Setting: By Host View, By Linked View, Custom...)"
+        },
+        {
+          "id": "views-4",
+          "n": 4,
+          "text": "Working with View Templates & Filters (Create, modify...)"
+        },
+        {
+          "id": "views-5",
+          "n": 5,
+          "text": "Working with Visibility/Graphic Overrides (VV/VG)"
+        },
+        {
+          "id": "views-6",
+          "n": 6,
+          "text": "Working with different types of views (Drafting View, Legends, Floor Plan, Area Plan, Elevation, Section...)"
+        },
+        {
+          "id": "views-7",
+          "n": 7,
+          "text": "Working with Custom View Visual (Crop/Section/Scope Box, Override Graphic, Scale, Graphic Display, View Range...)"
+        },
+        {
+          "id": "views-8",
+          "n": 8,
+          "text": "Working with Visualization (Sun setting, sun path, camera, rendering, lighting, materials...)"
+        },
+        {
+          "id": "views-9",
+          "n": 9,
+          "text": "Understand and edit Browser Organization included View, Schedule, Sheet"
+        },
+        {
+          "id": "views-10",
+          "n": 10,
+          "text": "Line Display (Thin Lines, Line Override in VV/VG tab, Show/Hide Hidden Lines, Linework...)"
+        }
+      ]
+    },
+    {
+      "id": "collaboration",
+      "name": "Collaboration",
+      "skills": [
+        {
+          "id": "collaboration-1",
+          "n": 1,
+          "text": "Create Local file"
+        },
+        {
+          "id": "collaboration-2",
+          "n": 2,
+          "text": "Collaborate with other people (Sync, Relinquish All Mine, Editing Requests, Grand/Deny/Retract request...)"
+        },
+        {
+          "id": "collaboration-3",
+          "n": 3,
+          "text": "Working with Workset (create, modify, open, close, visible in all view...)"
+        },
+        {
+          "id": "collaboration-4",
+          "n": 4,
+          "text": "Link Revit file into a working file (Linking options: By Internal Origin, By Shared Coordinates...)"
+        },
+        {
+          "id": "collaboration-5",
+          "n": 5,
+          "text": "Working with Linked Files (Reload, Reload From, Unload...)"
+        },
+        {
+          "id": "collaboration-6",
+          "n": 6,
+          "text": "Create Central file process (create workset, save, sync...)"
+        },
+        {
+          "id": "collaboration-7",
+          "n": 7,
+          "text": "Audit and Detach Model"
+        },
+        {
+          "id": "collaboration-8",
+          "n": 8,
+          "text": "Understand the differences between Link and Import file"
+        },
+        {
+          "id": "collaboration-9",
+          "n": 9,
+          "text": "Experience with Collaborate tab (Copy Monitor, Coordination Review, Reconcile Hosting, Interference Check...)"
+        },
+        {
+          "id": "collaboration-10",
+          "n": 10,
+          "text": "Can use Manage Models command group: Show History, Restore Backup, Publish Settings"
+        }
+      ]
+    },
+    {
+      "id": "documentation",
+      "name": "Documentation",
+      "skills": [
+        {
+          "id": "documentation-1",
+          "n": 1,
+          "text": "Work with Dimensions: Linear, Aligned, Arc Length, Angular, Diameter, Text"
+        },
+        {
+          "id": "documentation-2",
+          "n": 2,
+          "text": "Work with Spot Elevation, Spot Coordinates and Spot slope"
+        },
+        {
+          "id": "documentation-3",
+          "n": 3,
+          "text": "Create and edit Detail Lines, Line Style"
+        },
+        {
+          "id": "documentation-4",
+          "n": 4,
+          "text": "Create and modify Filled Region, Pattern, Masking Region"
+        },
+        {
+          "id": "documentation-5",
+          "n": 5,
+          "text": "Create family and Place a Detail Component family to make drawing"
+        },
+        {
+          "id": "documentation-6",
+          "n": 6,
+          "text": "Create and edit Legend Component"
+        },
+        {
+          "id": "documentation-7",
+          "n": 7,
+          "text": "Understand and place Sheet Issues/Revisions Cloud, revision on sheet, edit cloud."
+        },
+        {
+          "id": "documentation-8",
+          "n": 8,
+          "text": "Create Installation detail"
+        },
+        {
+          "id": "documentation-9",
+          "n": 9,
+          "text": "Work with Text Note (Type, font, leader, arrow...), Find and replace text"
+        },
+        {
+          "id": "documentation-10",
+          "n": 10,
+          "text": "Create Tag Family and place tag for elements (Duct/Pipe, Equipment, revision cloud, etc.) by category"
+        },
+        {
+          "id": "documentation-11",
+          "n": 11,
+          "text": "Set up Keynote and place keynote to element/material"
+        },
+        {
+          "id": "documentation-12",
+          "n": 12,
+          "text": "Place and modify Annotation Symbol Family in view, schematic"
+        },
+        {
+          "id": "documentation-13",
+          "n": 13,
+          "text": "Create Sheets and modify Sheet Parameters"
+        },
+        {
+          "id": "documentation-14",
+          "n": 14,
+          "text": "Insert Views, Schedule/Legend/Drafting View to Sheet. Edit detail number of Section, Callout, Elevation... on sheet"
+        },
+        {
+          "id": "documentation-15",
+          "n": 15,
+          "text": "Understand and use Guild Grid to arrange the views"
+        }
+      ]
+    },
+    {
+      "id": "management",
+      "name": "Management",
+      "skills": [
+        {
+          "id": "management-1",
+          "n": 1,
+          "text": "Set up a new project based on the Defaut Template, Set up Additional setting (Filled Patterns, Line Styles, Line Weight, etc...)"
+        },
+        {
+          "id": "management-2",
+          "n": 2,
+          "text": "Set up Project Location: Project Base Point, Survey Point, Work with Acquired/Publish Coordinates"
+        },
+        {
+          "id": "management-3",
+          "n": 3,
+          "text": "Set up Project Units, Project information"
+        },
+        {
+          "id": "management-4",
+          "n": 4,
+          "text": "Set up and configuation the Mechnical Setting and Electrical Setting"
+        },
+        {
+          "id": "management-5",
+          "n": 5,
+          "text": "Manage and modify Materials"
+        },
+        {
+          "id": "management-6",
+          "n": 6,
+          "text": "Manage and set Object Styles"
+        },
+        {
+          "id": "management-7",
+          "n": 7,
+          "text": "Manage and customize Snaps Setting"
+        },
+        {
+          "id": "management-8",
+          "n": 8,
+          "text": "Create and manage Project Parameters, Shared Parameters, Global Parameters"
+        },
+        {
+          "id": "management-9",
+          "n": 9,
+          "text": "Transfer and review Project Standard from files"
+        },
+        {
+          "id": "management-10",
+          "n": 10,
+          "text": "Use Purge Unused"
+        },
+        {
+          "id": "management-11",
+          "n": 11,
+          "text": "Manage Link: RVT, CAD, ..."
+        },
+        {
+          "id": "management-12",
+          "n": 12,
+          "text": "Create, manage and edit Design Option"
+        },
+        {
+          "id": "management-13",
+          "n": 13,
+          "text": "Create, manage and edit Phase/Phase Filter"
+        },
+        {
+          "id": "management-14",
+          "n": 14,
+          "text": "Understand, create, save and load Selection Sets"
+        },
+        {
+          "id": "management-15",
+          "n": 15,
+          "text": "Working with element IDs"
+        },
+        {
+          "id": "management-16",
+          "n": 16,
+          "text": "Access review, understand and resolved Revit Warnings"
+        },
+        {
+          "id": "management-17",
+          "n": 17,
+          "text": "Customize your Keyboard Shortcut for optimize work performance"
+        }
+      ]
+    }
+  ]
+}

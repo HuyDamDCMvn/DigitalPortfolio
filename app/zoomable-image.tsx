@@ -1,12 +1,50 @@
 "use client";
 
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useId, useLayoutEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 export type LightboxImage = {
   src: string;
   alt: string;
   title?: string;
   code?: string;
+};
+
+const overlayStyle: CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: "auto",
+  height: "auto",
+  margin: 0,
+  padding: 0,
+  zIndex: 2147483646,
+  background: "#031733",
+};
+
+const panelStyle: CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: "auto",
+  height: "auto",
+  overflow: "hidden",
+  background: "#031733",
+};
+
+const imageStyle: CSSProperties = {
+  width: "100%",
+  height: "100%",
+  maxWidth: "none",
+  maxHeight: "none",
+  objectFit: "contain",
+  objectPosition: "center",
+  display: "block",
+  background: "#031733",
 };
 
 export function ImageLightbox({
@@ -17,32 +55,42 @@ export function ImageLightbox({
   onClose: () => void;
 }) {
   const titleId = useId();
+  const [host, setHost] = useState<HTMLElement | null>(null);
   const [cacheKey] = useState(() => Date.now());
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
+  useLayoutEffect(() => {
+    const root = document.createElement("div");
+    root.setAttribute("data-lightbox-root", "");
+    document.documentElement.appendChild(root);
+    setHost(root);
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      root.remove();
     };
   }, [onClose]);
 
-  return (
+  if (!host) return null;
+
+  return createPortal(
     <div
       className="image-lightbox"
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
+      style={overlayStyle}
       onClick={onClose}
     >
-      <div className="image-lightbox-panel" onClick={(event) => event.stopPropagation()}>
+      <div className="image-lightbox-panel" style={panelStyle} onClick={(event) => event.stopPropagation()}>
         <div className="image-lightbox-toolbar">
           <p id={titleId}>
             {image.code ? <span>{image.code}</span> : null}
@@ -52,9 +100,15 @@ export function ImageLightbox({
             Close
           </button>
         </div>
-        <img key={cacheKey} src={`${image.src}?t=${cacheKey}`} alt={image.alt} />
+        <img
+          key={cacheKey}
+          src={`${image.src}?t=${cacheKey}`}
+          alt={image.alt}
+          style={imageStyle}
+        />
       </div>
-    </div>
+    </div>,
+    host,
   );
 }
 

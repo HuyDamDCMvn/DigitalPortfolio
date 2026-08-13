@@ -251,7 +251,19 @@ export default function Home() {
                 >
                   R
                 </a>
-                <div><p>Skills matrix</p><h3>Revit</h3></div>
+                <div>
+                  <p>
+                    <a
+                      href="/skills-survey"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open MEP Revit Skills Survey"
+                    >
+                      Skills matrix
+                    </a>
+                  </p>
+                  <h3>Revit</h3>
+                </div>
               </div>
               <div className="skill-cloud">
                 {['Documentation','Worksharing','Families','Management','Modeling','Parameters','Views'].map((skill) => <span key={skill}>{skill}</span>)}
