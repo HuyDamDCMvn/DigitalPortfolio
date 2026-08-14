@@ -38,3 +38,7 @@ yarn-error.log*
 /.wrangler/
 /outputs/
 /work/
+
+# Local MunichRE recovery (private; not part of the public portfolio)
+_munich_*
+
