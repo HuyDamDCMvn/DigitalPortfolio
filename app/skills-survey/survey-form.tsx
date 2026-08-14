@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { type Locale } from "../i18n";
+import {
+  getServerLocale,
+  readLocale,
+  subscribeLocale,
+  writeLocale,
+} from "../locale-provider";
 import data from "./data.json";
 import { SkillRadar } from "./radar-chart";
+import viText from "./vi.json";
 
-type Locale = "en" | "vi";
 type Skill = { id: string; n: number; text: string };
 type Group = { id: string; name: string; skills: Skill[] };
 
@@ -52,7 +59,7 @@ const SCALE = [
   {
     score: 4,
     fill: "#5b9bd5",
-    ink: "#ffffff",
+    ink: "#062553",
     en: "Proficient",
     vi: "Thành thạo",
     enDesc: "Relatively proficient. Considered able to work independently in this field",
@@ -70,13 +77,13 @@ const SCALE = [
 ] as const;
 
 const GROUP_META: Record<string, { en: string; vi: string; bg: string; ink: string }> = {
-  modeling: { en: "Modeling", vi: "Modeling", bg: "#c6e0b4", ink: "#375623" },
-  elements: { en: "Elements", vi: "Elements", bg: "#b4c7e7", ink: "#1f4e79" },
-  families: { en: "Families", vi: "Families", bg: "#ffe699", ink: "#806000" },
-  views: { en: "Views", vi: "Views", bg: "#d0cece", ink: "#595959" },
-  collaboration: { en: "Collaboration", vi: "Collaboration", bg: "#f8cbad", ink: "#c65911" },
-  documentation: { en: "Documentation", vi: "Documentation", bg: "#bdd7ee", ink: "#2e75b6" },
-  management: { en: "Management", vi: "Management", bg: "#e2d5f1", ink: "#5b3b8c" },
+  modeling: { en: "Modeling", vi: "Mô hình hóa", bg: "#c6e0b4", ink: "#375623" },
+  elements: { en: "Elements", vi: "Thành phần", bg: "#b4c7e7", ink: "#1f4e79" },
+  families: { en: "Families", vi: "Family", bg: "#ffe699", ink: "#806000" },
+  views: { en: "Views", vi: "View", bg: "#d0cece", ink: "#595959" },
+  collaboration: { en: "Collaboration", vi: "Cộng tác", bg: "#f4b183", ink: "#6b2a00" },
+  documentation: { en: "Documentation", vi: "Hồ sơ", bg: "#bdd7ee", ink: "#1f4e79" },
+  management: { en: "Management", vi: "Quản lý", bg: "#e2d5f1", ink: "#5b3b8c" },
 };
 
 const COPY = {
@@ -113,6 +120,11 @@ const COPY = {
     lowest: "LOWEST SKILLS",
     printPdf: "Print PDF",
     reset: "Clear answers",
+    download: "Download JSON",
+    confirmReset: "Clear all answers?",
+    rolePlaceholder: "e.g. Digital Lead",
+    swipeHint: "Rate each skill with the 0–5 buttons on each card.",
+    langGroup: "Language",
     progress: "answered",
     pending: "—",
     radarTitle: "Skill profile",
@@ -165,6 +177,11 @@ const COPY = {
     lowest: "NHÓM YẾU NHẤT",
     printPdf: "In PDF",
     reset: "Xóa câu trả lời",
+    download: "Tải JSON",
+    confirmReset: "Xóa toàn bộ câu trả lời?",
+    rolePlaceholder: "vd. Digital Lead",
+    swipeHint: "Chấm từng kỹ năng bằng nút 0–5 trên mỗi thẻ.",
+    langGroup: "Ngôn ngữ",
     progress: "đã trả lời",
     pending: "—",
     radarTitle: "Hồ sơ kỹ năng",
@@ -206,6 +223,51 @@ function emptyProfile(): Profile {
   return { name: "", role: "", teamLead: "", date: todayIso(), acu: false, acp: false, other: "" };
 }
 
+type SurveyDraft = { profile: Profile; answers: Answers };
+
+const emptyDraft = (): SurveyDraft => ({ profile: emptyProfile(), answers: {} });
+const draftListeners = new Set<() => void>();
+let draftCache: SurveyDraft | null = null;
+let draftRaw: string | null = null;
+
+function subscribeDraft(listener: () => void) {
+  draftListeners.add(listener);
+  return () => draftListeners.delete(listener);
+}
+
+function parseDraft(raw: string | null): SurveyDraft {
+  if (!raw) return emptyDraft();
+  try {
+    const saved = JSON.parse(raw) as { profile?: Profile; answers?: Answers };
+    return {
+      profile: saved.profile ? { ...emptyProfile(), ...saved.profile } : emptyProfile(),
+      answers: saved.answers ?? {},
+    };
+  } catch {
+    return emptyDraft();
+  }
+}
+
+function getDraftSnapshot(): SurveyDraft {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw === draftRaw && draftCache) return draftCache;
+  draftRaw = raw;
+  draftCache = parseDraft(raw);
+  return draftCache;
+}
+
+function writeDraft(next: SurveyDraft, locale: Locale) {
+  const raw = JSON.stringify({ locale, profile: next.profile, answers: next.answers });
+  localStorage.setItem(STORAGE_KEY, raw);
+  draftRaw = raw;
+  draftCache = next;
+  for (const listener of draftListeners) listener();
+}
+
+function getServerDraft(): SurveyDraft {
+  return emptyDraft();
+}
+
 function groupTone(ratio: number): EvalTone {
   if (ratio < 0.2) return "Inadequate";
   if (ratio < 0.4) return "Below Average";
@@ -228,30 +290,40 @@ function cellFilled(score: number | undefined, col: number) {
   return score >= col;
 }
 
+function skillLabel(skill: Skill, locale: Locale) {
+  if (locale === "vi") {
+    const translated = (viText as Record<string, string>)[skill.id];
+    return translated ?? skill.text;
+  }
+  return skill.text;
+}
+
 export function SkillsSurveyForm() {
-  const [locale, setLocale] = useState<Locale>("en");
-  const [profile, setProfile] = useState<Profile>(emptyProfile);
-  const [answers, setAnswers] = useState<Answers>({});
+  const locale = useSyncExternalStore(subscribeLocale, readLocale, getServerLocale);
+  const draft = useSyncExternalStore(subscribeDraft, getDraftSnapshot, getServerDraft);
   const [tip, setTip] = useState<{ title: string; desc: string; x: number; y: number; fill: string } | null>(null);
 
+  const profile = draft.profile;
+  const answers = draft.answers;
   const t = COPY[locale];
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw) as { locale?: Locale; profile?: Profile; answers?: Answers };
-      if (saved.locale === "en" || saved.locale === "vi") setLocale(saved.locale);
-      if (saved.profile) setProfile({ ...emptyProfile(), ...saved.profile });
-      if (saved.answers) setAnswers(saved.answers);
-    } catch {
-      /* ignore broken local drafts */
-    }
-  }, []);
+    document.documentElement.lang = locale;
+  }, [locale]);
 
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ locale, profile, answers }));
-  }, [locale, profile, answers]);
+  function setLocale(next: Locale) {
+    writeLocale(next);
+    writeDraft(draft, next);
+  }
+
+  function setProfile(next: Profile) {
+    writeDraft({ profile: next, answers }, locale);
+  }
+
+  function setAnswers(next: Answers | ((current: Answers) => Answers)) {
+    const answersNext = typeof next === "function" ? next(answers) : next;
+    writeDraft({ profile, answers: answersNext }, locale);
+  }
 
   const answeredCount = Object.keys(answers).length;
 
@@ -325,6 +397,28 @@ export function SkillsSurveyForm() {
     window.print();
   }
 
+  function downloadJson() {
+    const who = profile.name.trim().replace(/\s+/g, "-") || "draft";
+    const blob = new Blob(
+      [JSON.stringify({ locale, profile, answers }, null, 2)],
+      { type: "application/json" },
+    );
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `MEP-Skills-Survey-${who}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function clearAnswers() {
+    if (!window.confirm(t.confirmReset)) return;
+    localStorage.removeItem(STORAGE_KEY);
+    draftRaw = null;
+    draftCache = emptyDraft();
+    for (const listener of draftListeners) listener();
+  }
+
   return (
     <main className="skills-survey">
       <header className="skills-survey-bar">
@@ -336,7 +430,7 @@ export function SkillsSurveyForm() {
           <p className="skills-survey-count">
             {answeredCount}/{allSkills.length} {t.progress}
           </p>
-          <div className="skills-survey-lang" role="group" aria-label="Language">
+          <div className="skills-survey-lang" role="group" aria-label={t.langGroup}>
             <button type="button" className={locale === "en" ? "is-active" : ""} onClick={() => setLocale("en")}>
               EN
             </button>
@@ -364,7 +458,7 @@ export function SkillsSurveyForm() {
               <p className="matrix-instruction">{t.instruction}</p>
             </div>
 
-            <div className="matrix-scale" role="table" aria-label={t.rating}>
+            <div className="matrix-scale" aria-label={t.rating}>
               {SCALE.map((item) => (
                 <div key={item.score} className="matrix-scale-col" style={{ background: item.fill, color: item.ink }}>
                   <strong>{item.score}</strong>
@@ -390,7 +484,7 @@ export function SkillsSurveyForm() {
                   type="text"
                   value={profile.role}
                   onChange={(event) => setProfile({ ...profile, role: event.target.value })}
-                  placeholder="e.g. Digital Lead"
+                  placeholder={t.rolePlaceholder}
                 />
               </label>
               <label>
@@ -477,7 +571,7 @@ export function SkillsSurveyForm() {
                         </th>
                       ) : null}
                       <td className="is-num">{skill.n}</td>
-                      <td className="is-skill">{skill.text}</td>
+                      <td className="is-skill">{skillLabel(skill, locale)}</td>
                       <td className={score === undefined ? "is-rating is-empty" : "is-rating is-filled"}>
                         {score === undefined ? "" : score}
                       </td>
@@ -493,7 +587,7 @@ export function SkillsSurveyForm() {
                               className={selected ? "is-selected" : filled ? "is-filled" : ""}
                               style={filled ? { background: item.fill, color: item.ink } : undefined}
                               aria-pressed={selected}
-                              aria-label={`${skill.text}: ${item.score} · ${label}. ${desc}`}
+                              aria-label={`${skillLabel(skill, locale)}: ${item.score} · ${label}. ${desc}`}
                               onPointerEnter={(event) => showScaleTip(event.currentTarget, item)}
                               onPointerLeave={() => setTip(null)}
                               onFocus={(event) => showScaleTip(event.currentTarget, item)}
@@ -546,6 +640,47 @@ export function SkillsSurveyForm() {
               })}
             </tbody>
           </table>
+
+          <p className="matrix-swipe-hint">{t.swipeHint}</p>
+          <div className="matrix-mobile">
+            {groups.map((group) => (
+              <section key={group.id} className="skill-card-group">
+                <h2>{GROUP_META[group.id][locale]}</h2>
+                {group.skills.map((skill) => {
+                  const score = answers[skill.id];
+                  const label = skillLabel(skill, locale);
+                  return (
+                    <article key={skill.id} className="skill-card">
+                      <p className="skill-card-n">{skill.n}</p>
+                      <h3>{label}</h3>
+                      <div className="skill-card-scores" role="group" aria-label={`${label}: ${t.rating}`}>
+                        {SCALE.map((item) => {
+                          const selected = score === item.score;
+                          return (
+                            <button
+                              key={item.score}
+                              type="button"
+                              className={selected ? "is-selected" : ""}
+                              style={
+                                selected
+                                  ? { background: item.fill, color: item.ink }
+                                  : undefined
+                              }
+                              aria-pressed={selected}
+                              aria-label={`${label}: ${item.score} · ${locale === "vi" ? item.vi : item.en}`}
+                              onClick={() => setScore(skill.id, item.score)}
+                            >
+                              {item.score}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </article>
+                  );
+                })}
+              </section>
+            ))}
+          </div>
 
           <div className="matrix-bottom">
           <section className="matrix-radar" aria-labelledby="skill-radar-title">
@@ -611,16 +746,11 @@ export function SkillsSurveyForm() {
               </span>
             </p>
             <div className="matrix-actions">
-              <button
-                type="button"
-                className="button button-ghost-dark"
-                onClick={() => {
-                  setAnswers({});
-                  setProfile(emptyProfile());
-                  localStorage.removeItem(STORAGE_KEY);
-                }}
-              >
+              <button type="button" className="button button-ghost-dark" onClick={clearAnswers}>
                 {t.reset}
+              </button>
+              <button type="button" className="button button-ghost-dark" onClick={downloadJson}>
+                {t.download}
               </button>
               <button type="button" className="button button-primary" onClick={printPdf}>
                 {t.printPdf}

@@ -1,47 +1,32 @@
 "use client";
 
 import { useId, useState } from "react";
+import { useLocale } from "./locale-provider";
+import { LightboxTrigger } from "./zoomable-image";
 import { WorkflowVisual3D } from "./workflow-visual-3d";
 
-const stages = [
-  {
-    number: "01",
-    title: "Initial setup",
-    text: "Brief · review · validate · confirm · set up",
-    image: "/images/initial-setup.png",
-    imageAlt: "Initial setup process diagram",
-    caption: "Initial setup process",
-  },
-  {
-    number: "02",
-    title: "Data scanning",
-    text: "Export · store · prepare · analyze · visualize",
-    image: "/images/data-scanning.png",
-    imageAlt: "Data scanning process diagram",
-    caption: "Data scanning process",
-  },
-  {
-    number: "03",
-    title: "IFC validation",
-    text: "Health check · IDS compliance · quality report",
-    image: "/images/ifc-platform.png",
-    imageAlt: "IFC health check platform view",
-    caption: "IFC health and validation",
-    href: "https://ifc.dcm-vn.com/",
-  },
+const STAGE_MEDIA = [
+  { image: "/images/initial-setup.png" },
+  { image: "/images/data-scanning.png" },
+  { image: "/images/ifc-platform.png", href: "https://ifc.dcm-vn.com/" },
 ] as const;
 
 export function WorkflowMap() {
-  const [active, setActive] = useState<number | null>(null);
+  const { t } = useLocale();
+  const [active, setActive] = useState(0);
   const [hovered, setHovered] = useState<number | null>(null);
   const panelId = useId();
-  const selected = active === null ? null : stages[active];
-  const hoverPreview =
-    selected !== null && hovered !== null && hovered !== active;
+  const stages = t.workflow.stages;
+  const selected = stages[active];
+  const selectedMedia = STAGE_MEDIA[active];
+  const hoverPreview = hovered !== null && hovered !== active;
+  const previewIndex = hoverPreview && hovered !== null ? hovered : active;
+  const preview = stages[previewIndex];
+  const previewMedia = STAGE_MEDIA[previewIndex];
 
   return (
     <>
-      <div className="workflow-map" aria-label="Digital workflow stages">
+      <div className="workflow-map" aria-label={t.workflow.label}>
         {stages.map((stage, index) => {
           const isActive = active === index;
           return (
@@ -51,7 +36,7 @@ export function WorkflowMap() {
               className={`workflow-stage${isActive ? " is-active" : ""}`}
               aria-expanded={isActive}
               aria-controls={panelId}
-              onClick={() => setActive(isActive ? null : index)}
+              onClick={() => setActive(index)}
               onPointerEnter={() => setHovered(index)}
               onPointerLeave={() => setHovered((h) => (h === index ? null : h))}
             >
@@ -70,40 +55,45 @@ export function WorkflowMap() {
         })}
       </div>
 
-      {selected ? (
+      {selected && selectedMedia ? (
         <figure className="workflow-detail" id={panelId}>
           <WorkflowVisual3D
-            src={
-              hoverPreview && hovered !== null
-                ? stages[hovered].image
-                : selected.image
-            }
-            alt={
-              hoverPreview && hovered !== null
-                ? stages[hovered].imageAlt
-                : selected.imageAlt
-            }
-            pulseKey={hoverPreview && hovered !== null ? hovered : active ?? 0}
+            src={previewMedia.image}
+            alt={preview.imageAlt}
+            pulseKey={previewIndex}
             hoverPreview={hoverPreview}
           />
-          {"href" in selected && selected.href ? (
-            <figcaption>
+          <figcaption>
+            {"href" in selectedMedia && selectedMedia.href ? (
               <a
-                href={selected.href}
+                href={selectedMedia.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`Open ${selected.caption}`}
+                aria-label={`${t.openIfc}: ${selected.caption}`}
               >
                 <span>{selected.number}</span>
                 {selected.caption}
               </a>
-            </figcaption>
-          ) : (
-            <figcaption>
-              <span>{selected.number}</span>
-              {selected.caption}
-            </figcaption>
-          )}
+            ) : (
+              <p>
+                <span>{selected.number}</span>
+                {selected.caption}
+              </p>
+            )}
+            <LightboxTrigger
+              className="workflow-view-diagram"
+              label={`${t.viewDiagram}: ${selected.caption}`}
+              closeLabel={t.close}
+              image={{
+                src: selectedMedia.image,
+                alt: selected.imageAlt,
+                title: selected.caption,
+                code: selected.number,
+              }}
+            >
+              {t.viewDiagram}
+            </LightboxTrigger>
+          </figcaption>
         </figure>
       ) : null}
     </>

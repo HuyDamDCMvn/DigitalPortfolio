@@ -1,54 +1,30 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "./locale-provider";
 import { ImageLightbox } from "./zoomable-image";
 
-const tools = [
+const DEMOS = [
   {
-    label: "Auto-connect and size sprinkler systems",
-    demo: {
-      src: "/images/sprinkler-auto-connect.gif",
-      alt: "Animation of auto-connecting and sizing a sprinkler system",
-      title: "Auto Connect and Sizing Sprinkler System",
-      code: "01",
-    },
+    src: "/images/sprinkler-auto-connect.gif",
+    code: "01",
   },
   {
-    label: "Create grid dimensions",
-    demo: {
-      src: "/images/grid-dimensions.gif",
-      alt: "Animation of creating grid dimensions automatically",
-      title: "Create grid dimensions",
-      code: "02",
-    },
+    src: "/images/grid-dimensions.gif",
+    code: "02",
   },
-  { label: "Toggle grid bubbles" },
+  null,
   {
-    label: "Manage and visualize spaces",
-    demo: {
-      src: "/images/space-visualize.gif",
-      alt: "Animation of managing and visualizing spaces in a 3D model",
-      title: "Manage and visualize spaces",
-      code: "04",
-    },
+    src: "/images/space-visualize.gif",
+    code: "04",
   },
   {
-    label: "Create sections by element",
-    demo: {
-      src: "/images/section-by-element.gif",
-      alt: "Animation of creating sections by element with Smart Section",
-      title: "Create sections by element",
-      code: "05",
-    },
+    src: "/images/section-by-element.gif",
+    code: "05",
   },
   {
-    label: "Avoid Clash",
-    demo: {
-      src: "/images/avoid-clash.gif",
-      alt: "Animation of the Avoid Clash MEP reroute tool",
-      title: "Avoid Clash",
-      code: "06",
-    },
+    src: "/images/avoid-clash.gif",
+    code: "06",
   },
 ] as const;
 
@@ -60,21 +36,30 @@ type ToolDemo = {
 };
 
 export function AutomationToolList() {
+  const { t } = useLocale();
   const [active, setActive] = useState<ToolDemo | null>(null);
 
   return (
     <>
       <div className="tool-list">
-        {tools.map((tool, index) => {
+        {t.automation.tools.map((tool, index) => {
           const number = String(index + 1).padStart(2, "0");
-          if ("demo" in tool && tool.demo) {
+          const demo = DEMOS[index];
+          if (demo) {
             return (
               <button
                 key={tool.label}
                 type="button"
                 className="tool-list-item is-demo"
-                onClick={() => setActive(tool.demo)}
-                aria-label={`Play demo: ${tool.label}`}
+                onClick={() =>
+                  setActive({
+                    src: demo.src,
+                    code: demo.code,
+                    alt: "alt" in tool ? tool.alt : tool.label,
+                    title: "title" in tool ? tool.title : tool.label,
+                  })
+                }
+                aria-label={`${t.playDemo}: ${tool.label}`}
               >
                 <span>{number}</span>
                 <p>{tool.label}</p>
@@ -83,15 +68,24 @@ export function AutomationToolList() {
           }
 
           return (
-            <div key={tool.label} className="tool-list-item">
+            <div
+              key={tool.label}
+              className="tool-list-item is-disabled"
+              aria-disabled="true"
+            >
               <span>{number}</span>
-              <p>{tool.label}</p>
+              <p>
+                {tool.label}
+                <small>{t.noDemo}</small>
+              </p>
             </div>
           );
         })}
       </div>
 
-      {active ? <ImageLightbox image={active} onClose={() => setActive(null)} /> : null}
+      {active ? (
+        <ImageLightbox image={active} onClose={() => setActive(null)} closeLabel={t.close} />
+      ) : null}
     </>
   );
 }

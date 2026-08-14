@@ -1,26 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "./locale-provider";
 import { ImageLightbox, type LightboxImage } from "./zoomable-image";
 
-export type StoryChapter = {
-  code: string;
-  title: string;
-  line: string;
-  cue: string;
-  image: string;
-  imageAlt: string;
-};
+const CHAPTER_IMAGES = [
+  "/images/story-01-delivery.png",
+  "/images/story-02-team.png",
+  "/images/story-03-voices.png",
+  "/images/story-04-lead.png",
+] as const;
 
-export function StoryRetell({ chapters }: { chapters: StoryChapter[] }) {
+export function StoryRetell() {
+  const { t } = useLocale();
   const [active, setActive] = useState<(LightboxImage & { code: string; title: string }) | null>(null);
+  const chapters = t.story.chapters;
 
   return (
     <>
-      <div className="story-retell" aria-label="Team growth told as four connected chapters">
-        <p className="story-retell-kicker">Story retelling</p>
-              <ol className="story-retell-path" data-animate-stagger>
-          {chapters.map((chapter) => (
+      <div className="story-retell" aria-label={t.story.label}>
+        <p className="story-retell-kicker">{t.story.kicker}</p>
+        <ol className="story-retell-path" data-animate-stagger>
+          {chapters.map((chapter, index) => (
             <li key={chapter.code} className="story-retell-chapter">
               <article>
                 <button
@@ -28,18 +29,18 @@ export function StoryRetell({ chapters }: { chapters: StoryChapter[] }) {
                   className="story-retell-figure"
                   onClick={() =>
                     setActive({
-                      src: chapter.image,
+                      src: CHAPTER_IMAGES[index],
                       alt: chapter.imageAlt,
                       code: chapter.code,
                       title: chapter.title,
                     })
                   }
-                  aria-label={`View full image: ${chapter.imageAlt}`}
+                  aria-label={`${t.viewFullImage}: ${chapter.imageAlt}`}
                 >
                   <span className="story-retell-mark" aria-hidden="true">
                     {chapter.code}
                   </span>
-                  <img src={chapter.image} alt={chapter.imageAlt} loading="lazy" />
+                  <img src={CHAPTER_IMAGES[index]} alt={chapter.imageAlt} loading="lazy" />
                 </button>
                 <p className="story-retell-cue">{chapter.cue}</p>
                 <h3>{chapter.title}</h3>
@@ -48,10 +49,12 @@ export function StoryRetell({ chapters }: { chapters: StoryChapter[] }) {
             </li>
           ))}
         </ol>
-        <p className="story-retell-end">From one embedded role to a connected Digital Lead view.</p>
+        <p className="story-retell-end">{t.story.end}</p>
       </div>
 
-      {active ? <ImageLightbox image={active} onClose={() => setActive(null)} /> : null}
+      {active ? (
+        <ImageLightbox image={active} onClose={() => setActive(null)} closeLabel={t.close} />
+      ) : null}
     </>
   );
 }

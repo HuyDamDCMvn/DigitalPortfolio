@@ -5,19 +5,20 @@ import { useFrame } from "@react-three/fiber";
 import { useRef, type RefObject } from "react";
 import type { PerspectiveCamera } from "three";
 import { CanvasShell } from "./r3f/canvas-shell";
+import { useLocale } from "./locale-provider";
 import {
   DiagramPlane,
   type DiagramPointerState,
 } from "./r3f/diagram-plane";
 
-/** Cropped asset: border removed, full puzzle + character kept. */
-const HERO_SRC = "/images/hero-system.png?v=fit-full-2";
-const HERO_ALT =
-  "Connected building-services system visual from the team presentation";
+/** Full board from hero-system-full.png — tight crop cut the figure on the right. */
+const HERO_SRC = "/images/hero-system.png?v=vent-3";
+const HERO_WIDTH = 482;
+const HERO_HEIGHT = 676;
 
 useTexture.preload(HERO_SRC);
 
-const PLANE_ASPECT = 385 / 629;
+const PLANE_ASPECT = HERO_WIDTH / HERO_HEIGHT;
 const PLANE_WIDTH = 2.4;
 /**
  * object-fit: contain with padding — full content visible inside the
@@ -84,10 +85,12 @@ function HeroScene({
 }
 
 export function HeroVisual3D() {
+  const { t } = useLocale();
   const pointerRef = useRef<DiagramPointerState>({ x: 0, y: 0, hover: 0 });
+  const alt = t.hero.visual;
 
   const fallback = (
-    <img src={HERO_SRC} alt={HERO_ALT} width={385} height={629} />
+    <img src={HERO_SRC} alt={alt} width={HERO_WIDTH} height={HERO_HEIGHT} />
   );
 
   return (
@@ -98,7 +101,7 @@ export function HeroVisual3D() {
         alpha
         eager
         camera={{ position: [0, 0, 3.8], fov: 40 }}
-        aria-label={HERO_ALT}
+        aria-label={alt}
       >
         <HeroScene pointerRef={pointerRef} />
       </CanvasShell>

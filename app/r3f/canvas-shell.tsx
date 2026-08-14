@@ -21,6 +21,7 @@ type CanvasShellProps = {
   };
   /** Transparent clear for light backgrounds */
   alpha?: boolean;
+  shadows?: boolean;
   /** Mount WebGL immediately (hero / above-the-fold) — skips intersection delay flash */
   eager?: boolean;
   "aria-label"?: string;
@@ -54,6 +55,7 @@ export function CanvasShell({
   children,
   camera = { position: [0, 0, 2.6], fov: 40 },
   alpha = false,
+  shadows = false,
   eager = false,
   "aria-label": ariaLabel,
 }: CanvasShellProps) {
@@ -79,6 +81,7 @@ export function CanvasShell({
           <Canvas
             dpr={[1, 1.5]}
             camera={camera}
+            shadows={shadows}
             gl={{ antialias: true, alpha, powerPreference: "high-performance" }}
             style={{ touchAction: "pan-y" }}
             onCreated={({ gl }) => {

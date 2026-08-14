@@ -1,8 +1,9 @@
 "use client";
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { CanvasShell } from "../../r3f/canvas-shell";
 import { ContactShadows, Environment, Float, OrbitControls } from "@react-three/drei";
-import { Suspense, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import { useRef } from "react";
 import type { PulseMaterialImpl } from "./pulse-material";
 import "./pulse-material";
 
@@ -62,19 +63,24 @@ function LabScene() {
   );
 }
 
-export function R3fLabCanvas() {
-  return (
-    <div className="r3f-lab-canvas">
-      <Canvas
-        shadows
-        dpr={[1, 1.75]}
-        camera={{ position: [0, 0.35, 4.2], fov: 42 }}
-        gl={{ antialias: true, alpha: false }}
-      >
-        <Suspense fallback={null}>
-          <LabScene />
-        </Suspense>
-      </Canvas>
+export function R3fLabCanvas({ loadingLabel }: { loadingLabel: string }) {
+  const fallback = (
+    <div className="r3f-lab-fallback">
+      <span />
+      <p>{loadingLabel}</p>
     </div>
+  );
+
+  return (
+    <CanvasShell
+      className="r3f-lab-canvas"
+      fallback={fallback}
+      eager
+      shadows
+      camera={{ position: [0, 0.35, 4.2], fov: 42 }}
+      aria-label={loadingLabel}
+    >
+      <LabScene />
+    </CanvasShell>
   );
 }

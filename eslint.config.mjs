@@ -46,6 +46,11 @@ const eslintConfig = defineConfig([
     rules: {
       // R3F / drei pass Three.js props through JSX.
       "react/no-unknown-property": "off",
+    },
+  },
+  {
+    files: ["app/**/*.{ts,tsx}"],
+    rules: {
       "@next/next/no-img-element": "off",
       "@next/next/no-html-link-for-pages": "off",
     },
