@@ -4,6 +4,7 @@ import { AutomationToolList } from "./automation-tools";
 import { HeroVisual3D } from "./hero-visual-3d";
 import { useLocale } from "./locale-provider";
 import { PageMotion } from "./page-motion";
+import { RoleAccordion } from "./role-accordion";
 import { SiteHeader } from "./site-header";
 import { StoryRetell } from "./story-retell";
 import { WorkflowMap } from "./workflow-map";
@@ -93,16 +94,17 @@ export function HomeView() {
                 title={t.coordinator.title}
                 text={t.coordinator.text}
               />
-              <div className="role-list" data-animate-stagger>
-                {t.coordinator.roles.map(([number, title, text]) => (
-                  <article key={number}>
-                    <span>{number}</span>
-                    <div>
-                      <h3>{title}</h3>
-                      <p>{text}</p>
-                    </div>
-                  </article>
-                ))}
+              <div data-animate>
+                <RoleAccordion
+                  items={t.coordinator.roles.map(([number, title, text]) => ({
+                    number,
+                    title,
+                    text,
+                  }))}
+                  label={t.coordinator.rolesLabel}
+                  expandLabel={t.coordinator.expand}
+                  collapseLabel={t.coordinator.collapse}
+                />
               </div>
             </div>
             <div className="coordinator-visuals" data-animate-stagger>

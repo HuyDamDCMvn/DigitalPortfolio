@@ -1,0 +1,23 @@
+{
+  "id": "orange-varsity",
+  "file": "char-orange-varsity.glb",
+  "kit_id": "CharOrangeVarsity",
+  "body": "male",
+  "hair": "spike",
+  "wardrobe": "varsity",
+  "accessories": [],
+  "footwear": "boot",
+  "colors": {
+    "skin": "#efe4d6",
+    "skinDeep": "#d0a888",
+    "hair": "#f06028",
+    "iris": "#4a3220",
+    "jacket": "#e24a12",
+    "jacketTrim": "#1a1818",
+    "shirt": "#1a1818",
+    "pants": "#1a2430",
+    "shoes": "#12161c",
+    "sole": "#e24a12",
+    "logo": "#f4f7fa"
+  }
+}

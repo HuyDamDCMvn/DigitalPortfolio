@@ -1,0 +1,23 @@
+{
+  "id": "teal-headphones",
+  "file": "char-teal-headphones.glb",
+  "kit_id": "CharTealHeadphones",
+  "body": "female",
+  "hair": "long",
+  "wardrobe": "varsity",
+  "accessories": ["headphones"],
+  "footwear": "boot",
+  "colors": {
+    "skin": "#f6efe6",
+    "skinDeep": "#d8b8a8",
+    "hair": "#2ec4b6",
+    "iris": "#1e6e68",
+    "jacket": "#1a5c6c",
+    "jacketTrim": "#12161c",
+    "shirt": "#2ec4b6",
+    "pants": "#12161c",
+    "shoes": "#12161c",
+    "sole": "#2ec4b6",
+    "logo": "#5fc7ec"
+  }
+}

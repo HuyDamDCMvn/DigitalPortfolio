@@ -21,9 +21,13 @@ type CanvasShellProps = {
   };
   /** Transparent clear for light backgrounds */
   alpha?: boolean;
+  /** Opaque clear when `alpha` is false. Defaults to the lab navy. */
+  clearColor?: number;
   shadows?: boolean;
   /** Mount WebGL immediately (hero / above-the-fold) — skips intersection delay flash */
   eager?: boolean;
+  /** Applied to the live canvas only, so fallback copy stays readable by assistive tech */
+  role?: string;
   "aria-label"?: string;
 };
 
@@ -55,8 +59,10 @@ export function CanvasShell({
   children,
   camera = { position: [0, 0, 2.6], fov: 40 },
   alpha = false,
+  clearColor = 0x031733,
   shadows = false,
   eager = false,
+  role,
   "aria-label": ariaLabel,
 }: CanvasShellProps) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -75,7 +81,7 @@ export function CanvasShell({
   }
 
   return (
-    <div ref={rootRef} className={className} aria-label={ariaLabel}>
+    <div ref={rootRef} className={className} role={inView ? role : undefined} aria-label={ariaLabel}>
       {inView ? (
         <WebGlGate onFail={onFail}>
           <Canvas
@@ -85,7 +91,7 @@ export function CanvasShell({
             gl={{ antialias: true, alpha, powerPreference: "high-performance" }}
             style={{ touchAction: "pan-y" }}
             onCreated={({ gl }) => {
-              gl.setClearColor(alpha ? 0x000000 : 0x031733, alpha ? 0 : 1);
+              gl.setClearColor(alpha ? 0x000000 : clearColor, alpha ? 0 : 1);
             }}
           >
             <Suspense fallback={null}>{children}</Suspense>

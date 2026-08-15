@@ -1,0 +1,23 @@
+{
+  "id": "white-glasses",
+  "file": "char-white-glasses.glb",
+  "kit_id": "CharWhiteGlasses",
+  "body": "male",
+  "hair": "sidepart",
+  "wardrobe": "varsity",
+  "accessories": ["glasses"],
+  "footwear": "sneaker",
+  "colors": {
+    "skin": "#f6efe6",
+    "skinDeep": "#d8b8a8",
+    "hair": "#1c1a1a",
+    "iris": "#4a3220",
+    "jacket": "#f4f7fa",
+    "jacketTrim": "#1a1818",
+    "shirt": "#1a1818",
+    "pants": "#12161c",
+    "shoes": "#12161c",
+    "sole": "#f4f7fa",
+    "logo": "#1a1818"
+  }
+}

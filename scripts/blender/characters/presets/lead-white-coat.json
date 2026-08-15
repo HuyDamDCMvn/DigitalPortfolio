@@ -1,0 +1,25 @@
+{
+  "id": "lead-white-coat",
+  "file": "char-lead-white-coat.glb",
+  "kit_id": "CharLead",
+  "body": "male",
+  "hair": "spike-lead",
+  "wardrobe": "greatcoat",
+  "brow": "heavy",
+  "accessories": ["scar"],
+  "colors": {
+    "skin": "#e8d4c4",
+    "skinDeep": "#c4a090",
+    "hair": "#121010",
+    "jacket": "#f4f6f8",
+    "jacketTrim": "#c9a227",
+    "gold": "#c9a227",
+    "vest": "#1a1a1e",
+    "tie": "#121212",
+    "pants": "#d8dce2",
+    "shoes": "#1a1816",
+    "glove": "#1a1a1e",
+    "scar": "#6a3a32",
+    "logo": "#c9a227"
+  }
+}

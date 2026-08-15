@@ -1,0 +1,23 @@
+{
+  "id": "purple-bun",
+  "file": "char-purple-bun.glb",
+  "kit_id": "CharPurpleBun",
+  "body": "female",
+  "hair": "bun",
+  "wardrobe": "varsity",
+  "accessories": [],
+  "footwear": "boot",
+  "colors": {
+    "skin": "#eadfd4",
+    "skinDeep": "#c8b0a4",
+    "hair": "#4b2f9a",
+    "iris": "#4a2878",
+    "jacket": "#3a2460",
+    "jacketTrim": "#12161c",
+    "shirt": "#c4b0ff",
+    "pants": "#1a2430",
+    "shoes": "#12161c",
+    "sole": "#6b4cff",
+    "logo": "#f4f7fa"
+  }
+}

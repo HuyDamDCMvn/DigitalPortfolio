@@ -1,1 +1,31 @@
+Drop .glb / .gltf files in this folder.
 
+Convention (see app/lab/kit.ts):
+  metres, floor at y = 0, front is local +Z.
+  Tabletop props (laptop, mug, notebook) sit on HexTable 0.726 / LeadTable 0.77.
+  Place with <LabPart id="…" position={[x, y, z]} rotationY={yaw} />.
+
+Digital Lead (from story-04-lead.png):
+  lead-table.glb
+  lead-chair.glb
+  lead-figure-point.glb
+  lead-figure-hardhat.glb
+  lead-figure-sit.glb
+  lead-figure-stand-tablet.glb
+  lead-figure-stand-plans.glb
+  lead-laptop.glb
+  lead-mug.glb
+  lead-notebook.glb
+  lead-blueprints.glb
+  lead-dashboard.glb
+
+Other samples:
+  walker.glb, hex-table.glb, office-chair.glb, humanoid-sitting.glb,
+  laptop.glb, bookshelf-table.glb, digital-massing.glb
+
+Regenerate:
+  pnpm models:lead
+  pnpm models:walker
+  pnpm models:collab
+  pnpm models:bookshelf
+  pnpm models:massing

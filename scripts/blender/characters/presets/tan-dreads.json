@@ -1,0 +1,23 @@
+{
+  "id": "tan-dreads",
+  "file": "char-tan-dreads.glb",
+  "kit_id": "CharTanDreads",
+  "body": "male",
+  "hair": "dreads",
+  "wardrobe": "varsity",
+  "accessories": [],
+  "footwear": "sneaker",
+  "colors": {
+    "skin": "#7a5238",
+    "skinDeep": "#4a3020",
+    "hair": "#1a100c",
+    "iris": "#2a1810",
+    "jacket": "#c4a882",
+    "jacketTrim": "#1a1818",
+    "shirt": "#1a1818",
+    "pants": "#12161c",
+    "shoes": "#12161c",
+    "sole": "#c4a882",
+    "logo": "#1a1818"
+  }
+}

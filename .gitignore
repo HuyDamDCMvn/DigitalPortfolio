@@ -42,3 +42,13 @@ yarn-error.log*
 # Local MunichRE recovery (private; not part of the public portfolio)
 _munich_*
 
+# Blender kit MCP
+/mcp/blender/.venv/
+/mcp/blender/.tmp/
+/mcp/blender/**/__pycache__/
+/mcp/blender/**/*.egg-info/
+/mcp/blender/.pytest_cache/
+/scripts/blender/**/__pycache__/
+tsconfig.tsbuildinfo
+
+

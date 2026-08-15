@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "blender-kit": {
+      "command": "${workspaceFolder}\\mcp\\blender\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}\\mcp\\blender\\main.py"
+      ],
+      "env": {
+        "BLENDER_KIT_ROOT": "${workspaceFolder}",
+        "BLENDER_PATH": "D:\\03_DCMvn\\tools\\blender-4.5.10\\blender-4.5.10-windows-x64\\blender.exe",
+        "BLENDER_MCP_TIMEOUT": "180",
+        "BLENDER_CHAR_TIMEOUT": "480"
+      }
+    }
+  }
+}

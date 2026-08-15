@@ -1,6 +1,7 @@
 "use client";
 
 import { LocaleProvider, useLocale } from "../../locale-provider";
+import { HubStillsStrip } from "../hub-stills";
 import { R3fLabCanvas } from "./scene";
 import "./lab.css";
 
@@ -15,26 +16,70 @@ function LabView() {
           <h1>{t.lab.title}</h1>
           <p className="r3f-lab-copy">{t.lab.copy}</p>
         </div>
-        <a className="r3f-lab-back" href="/">
-          ← {t.lab.back}
-        </a>
+        <div className="parts-header-tools">
+          <a className="r3f-lab-back" href="/lab/lead">
+            {t.hang.leadCta}
+          </a>
+          <a className="r3f-lab-back" href="/lab/neobot">
+            {t.hang.neobotCta}
+          </a>
+          <a className="r3f-lab-back" href="/lab/parts">
+            {t.hang.hangCta}
+          </a>
+          <a className="r3f-lab-back" href="/">
+            ← {t.lab.back}
+          </a>
+        </div>
       </header>
 
       <R3fLabCanvas loadingLabel={t.lab.loading} />
 
+      <HubStillsStrip />
+
       <aside className="r3f-lab-notes">
-        <h2>{t.lab.where}</h2>
-        <ul>
-          <li>
-            <code>app/lab/r3f/pulse-material.tsx</code>
-          </li>
-          <li>
-            <code>app/lab/r3f/scene.tsx</code>
-          </li>
-          <li>
-            <code>public/models/</code>
-          </li>
-        </ul>
+        <div className="r3f-lab-notes-grid">
+          <section>
+            <h2>{t.lab.parts}</h2>
+            <ul>
+              {t.lab.partItems.map((item) => (
+                <li key={item.code}>
+                  <code>{item.code}</code>
+                  {" — "}
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section>
+            <h2>{t.lab.where}</h2>
+            <ul>
+              <li>
+                <code>public/models/oct-table.glb</code>
+              </li>
+              <li>
+                <code>public/models/office-chair.glb</code>
+              </li>
+              <li>
+                <code>public/models/holo-city.glb</code>
+              </li>
+              <li>
+                <code>public/models/laptop.glb</code>
+              </li>
+              <li>
+                <code>public/models/char-*.glb</code>
+              </li>
+              <li>
+                <code>app/lab/meeting-hub.tsx</code>
+              </li>
+              <li>
+                <code>app/lab/kit.ts</code>
+              </li>
+              <li>
+                <code>app/lab/r3f/scene.tsx</code>
+              </li>
+            </ul>
+          </section>
+        </div>
       </aside>
     </main>
   );

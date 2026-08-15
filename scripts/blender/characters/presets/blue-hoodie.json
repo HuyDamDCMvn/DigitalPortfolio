@@ -1,0 +1,24 @@
+{
+  "id": "blue-hoodie",
+  "file": "char-blue-hoodie.glb",
+  "kit_id": "CharBlueHoodie",
+  "body": "male",
+  "hair": "spike",
+  "wardrobe": "hoodie",
+  "accessories": ["headphones"],
+  "footwear": "sneaker",
+  "colors": {
+    "skin": "#f0e4d8",
+    "skinDeep": "#c8a090",
+    "hair": "#2a58c4",
+    "iris": "#4a3220",
+    "jacket": "#163830",
+    "jacketTrim": "#5fc7ec",
+    "shirt": "#1a2430",
+    "vest": "#12161c",
+    "pants": "#12161c",
+    "shoes": "#12161c",
+    "sole": "#5fc7ec",
+    "logo": "#5fc7ec"
+  }
+}

@@ -3,7 +3,7 @@ import { R3fLabPageClient } from "./lab-view";
 
 export const metadata: Metadata = {
   title: "R3F Lab — Digital Team",
-  description: "Sandbox for React Three Fiber, drei, and custom shaders.",
+  description: "Sandbox for React Three Fiber: hex table, chairs, figures, laptops, bookshelf.",
   robots: { index: false, follow: false },
 };
 

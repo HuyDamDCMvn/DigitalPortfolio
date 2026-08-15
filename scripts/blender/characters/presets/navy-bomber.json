@@ -1,0 +1,23 @@
+{
+  "id": "navy-bomber",
+  "file": "char-navy-bomber.glb",
+  "kit_id": "CharNavyBomber",
+  "body": "male",
+  "hair": "spike",
+  "wardrobe": "bomber",
+  "accessories": [],
+  "footwear": "sneaker",
+  "colors": {
+    "skin": "#f3ebe3",
+    "skinDeep": "#d4b09a",
+    "hair": "#1a1818",
+    "iris": "#4a3220",
+    "jacket": "#021433",
+    "jacketTrim": "#2ec4b6",
+    "shirt": "#2ec4b6",
+    "pants": "#1a2430",
+    "shoes": "#12161c",
+    "sole": "#2ec4b6",
+    "logo": "#5fc7ec"
+  }
+}
