@@ -23,6 +23,9 @@ function LabView() {
           <a className="r3f-lab-back" href="/lab/neobot">
             {t.hang.neobotCta}
           </a>
+          <a className="r3f-lab-back" href="/lab/cards">
+            {t.hang.cardsCta}
+          </a>
           <a className="r3f-lab-back" href="/lab/parts">
             {t.hang.hangCta}
           </a>

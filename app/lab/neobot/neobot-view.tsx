@@ -56,6 +56,9 @@ function NeobotView() {
           <a className="r3f-lab-back" href="/lab/r3f">
             {t.neobot.labCta}
           </a>
+          <a className="r3f-lab-back" href="/lab/cards">
+            {t.hang.cardsCta}
+          </a>
           <a className="r3f-lab-back" href="/lab/parts">
             {t.neobot.hangCta}
           </a>

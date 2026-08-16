@@ -24,6 +24,8 @@ type CanvasShellProps = {
   /** Opaque clear when `alpha` is false. Defaults to the lab navy. */
   clearColor?: number;
   shadows?: boolean;
+  /** Pixel ratio cap. Lab canvases that need a thin edge can raise the max. */
+  dpr?: [number, number];
   /** Mount WebGL immediately (hero / above-the-fold) — skips intersection delay flash */
   eager?: boolean;
   /** Applied to the live canvas only, so fallback copy stays readable by assistive tech */
@@ -61,6 +63,7 @@ export function CanvasShell({
   alpha = false,
   clearColor = 0x031733,
   shadows = false,
+  dpr = [1, 1.5],
   eager = false,
   role,
   "aria-label": ariaLabel,
@@ -85,7 +88,7 @@ export function CanvasShell({
       {inView ? (
         <WebGlGate onFail={onFail}>
           <Canvas
-            dpr={[1, 1.5]}
+            dpr={dpr}
             camera={camera}
             shadows={shadows}
             gl={{ antialias: true, alpha, powerPreference: "high-performance" }}
