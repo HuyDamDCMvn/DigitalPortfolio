@@ -347,46 +347,6 @@ export const messages = {
       back: "Portfolio",
       labCta: "Orbit assembled hub",
       hangCta: "Hang parts on the page",
-      layersHeading: "Five layers make the look",
-      layers: [
-        {
-          code: "01",
-          title: "The original scene file",
-          text: "This welcome stage is the original Spline scene. Click the robot or Digital to open the Digital Team portfolio.",
-        },
-        {
-          code: "02",
-          title: "Two blacks, not one",
-          text: "The helmet is chrome. The torso, pauldrons and upper arms are a matte carbon twill. Mixing them is what reads as NEXBOT — an all-gloss capsule does not.",
-        },
-        {
-          code: "03",
-          title: "LED grids behind a visor",
-          text: "Each eye is a grid of white emissive dots, set into a dark visor that frosts toward the chin. Not cyan slits, not a single square logo.",
-        },
-        {
-          code: "04",
-          title: "Exposed hinges",
-          text: "Neck rings, shoulder balls, elbow pins and two hip cylinders stay chrome and uncovered. The body is athletic V-taper with a tiny waist.",
-        },
-        {
-          code: "05",
-          title: "Look At from Spline",
-          text: "Head tracking is the scene’s own Look At event. Bloom and depth of field come from the Spline file. Click the robot or Digital to enter the portfolio.",
-        },
-      ],
-      knobsHeading: "Knobs worth turning",
-      knobs: [
-        { code: "nexbot.splinecode", label: "Self-hosted Spline binary — robot, materials, Look At" },
-        { code: "Look At", label: "Authored on Head in Spline — damping lives in the scene" },
-        { code: "stage logo", label: "BKW lockup, top-left of the stage — links home" },
-        { code: "wordmark", label: "Digital, top-right — brushed metal, cursor shine, links to the portfolio" },
-        { code: "click", label: "Robot click — opens the Digital Team portfolio" },
-        { code: "prefers-reduced-motion", label: "Drops WebGL and the float; the still still opens the portfolio" },
-        { code: "setBackgroundColor", label: "transparent so the cosmic navy field shows around the robot" },
-        { code: "cosmos", label: "CSS nebula, stars, and a faint grid floor — no extra WebGL" },
-      ],
-      where: "Where to edit",
     },
     cardsLab: {
       eyebrow: "Lab · Spline study",
@@ -986,46 +946,6 @@ export const messages = {
       back: "Portfolio",
       labCta: "Xoay hub đã lắp",
       hangCta: "Treo bộ phận lên trang",
-      layersHeading: "Năm lớp tạo nên vẻ ngoài này",
-      layers: [
-        {
-          code: "01",
-          title: "File scene gốc",
-          text: "Khung chào mừng này là scene Spline gốc. Bấm robot hoặc Digital để mở Digital Team portfolio.",
-        },
-        {
-          code: "02",
-          title: "Hai màu đen, không phải một",
-          text: "Mũ là chrome. Thân, giáp vai và cánh tay trên là twill carbon mờ. Trộn hai chất liệu mới ra đúng NEXBOT — một viên capsule bóng toàn thân thì không.",
-        },
-        {
-          code: "03",
-          title: "Lưới LED sau visor",
-          text: "Mỗi mắt là lưới chấm trắng phát sáng, đặt trong visor tối, phần cằm phủ frost. Không phải khe cyan, không phải một logo vuông.",
-        },
-        {
-          code: "04",
-          title: "Khớp bản lề lộ",
-          text: "Vòng cổ, bi vai, chốt khuỷu và hai trụ hông giữ chrome, không bọc da. Thân là V-taper eo nhỏ.",
-        },
-        {
-          code: "05",
-          title: "Look At từ Spline",
-          text: "Đầu theo con trỏ là event Look At trong scene. Bloom và độ sâu trường ảnh đi theo file Spline. Bấm robot hoặc Digital để vào portfolio.",
-        },
-      ],
-      knobsHeading: "Những núm nên thử",
-      knobs: [
-        { code: "nexbot.splinecode", label: "Binary Spline tự host — robot, chất liệu, Look At" },
-        { code: "Look At", label: "Gắn trên Head trong Spline — damping nằm trong scene" },
-        { code: "stage logo", label: "Logo BKW góc trên-trái khung — về trang chủ" },
-        { code: "wordmark", label: "Digital góc trên-phải — kim loại, sáng theo chuột, mở portfolio" },
-        { code: "click", label: "Bấm robot — mở Digital Team portfolio" },
-        { code: "prefers-reduced-motion", label: "Tắt WebGL và hiệu ứng nổi; ảnh still vẫn mở portfolio" },
-        { code: "setBackgroundColor", label: "transparent để trường navy vũ trụ hiện quanh robot" },
-        { code: "cosmos", label: "Tinh vân, sao và sàn lưới CSS — không thêm WebGL" },
-      ],
-      where: "Chỗ chỉnh",
     },
     cardsLab: {
       eyebrow: "Lab · nghiên cứu Spline",

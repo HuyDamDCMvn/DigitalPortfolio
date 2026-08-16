@@ -5,7 +5,6 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import { LocaleProvider, useLocale } from "../../locale-provider";
 import { NeobotSplineStage } from "./spline-stage";
-import "../r3f/lab.css";
 import "./neobot.css";
 
 gsap.registerPlugin(useGSAP);
@@ -155,65 +154,10 @@ function NeobotView() {
 
   return (
     <main className="neobot-page">
-      <a className="skip-link" href="#neobot-layers">
-        {t.skip}
-      </a>
-
       <section className="neobot-welcome" aria-label={t.neobot.title}>
         <h1 className="neobot-welcome-title">{t.neobot.title}</h1>
         <NeobotStage />
       </section>
-
-      <section id="neobot-layers" className="neobot-notes">
-        <h2>{t.neobot.layersHeading}</h2>
-        <ol className="neobot-layer-grid">
-          {t.neobot.layers.map((layer) => (
-            <li key={layer.code}>
-              <span className="neobot-layer-code">{layer.code}</span>
-              <h3>{layer.title}</h3>
-              <p>{layer.text}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <aside className="r3f-lab-notes">
-        <div className="r3f-lab-notes-grid">
-          <section>
-            <h2>{t.neobot.knobsHeading}</h2>
-            <ul>
-              {t.neobot.knobs.map((knob) => (
-                <li key={knob.code}>
-                  <code>{knob.code}</code>
-                  {" — "}
-                  {knob.label}
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section>
-            <h2>{t.neobot.where}</h2>
-            <ul>
-              <li>
-                <a href="https://community.spline.design/file/615b9422-9985-43f6-8593-d7d7bc3b0be1">
-                  Spline · NEXBOT (CC0)
-                </a>
-              </li>
-              <li>
-                <code>app/lab/neobot/spline-stage.tsx</code>
-              </li>
-              <li>
-                <code>app/i18n.ts</code>
-                {" — "}
-                <code>neobot.wordmark</code>
-              </li>
-              <li>
-                <code>public/models/nexbot.splinecode</code>
-              </li>
-            </ul>
-          </section>
-        </div>
-      </aside>
     </main>
   );
 }
