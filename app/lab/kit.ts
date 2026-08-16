@@ -305,6 +305,13 @@ export const KIT = {
     orbitSpeed: WORLD.slowOrbitSpeed,
     previewYaw: 0.35,
   },
+  ParticleBrain: {
+    src: "/models/particle-brain.glb?v=5",
+    file: "particle-brain.glb",
+    anchor: "floor",
+    idle: "none",
+    orbitSpeed: WORLD.slowOrbitSpeed,
+  },
 } as const satisfies Record<string, KitPart>;
 
 export type KitId = keyof typeof KIT;

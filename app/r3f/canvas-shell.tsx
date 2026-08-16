@@ -91,8 +91,9 @@ export function CanvasShell({
             dpr={dpr}
             camera={camera}
             shadows={shadows}
+            resize={{ scroll: false, debounce: 0 }}
             gl={{ antialias: true, alpha, powerPreference: "high-performance" }}
-            style={{ touchAction: "pan-y" }}
+            style={{ width: "100%", height: "100%", display: "block", overflow: "hidden", touchAction: "pan-y" }}
             onCreated={({ gl }) => {
               gl.setClearColor(alpha ? 0x000000 : clearColor, alpha ? 0 : 1);
             }}

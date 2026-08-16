@@ -24,13 +24,13 @@ function StudioRig() {
     <>
       <color attach="background" args={["#dce2ea"]} />
       <Environment resolution={256}>
-        <Lightformer form="rect" intensity={5} color="#ffffff" position={[0, 3.4, 2.6]} scale={[8, 3.4, 1]} />
-        <Lightformer form="rect" intensity={2.4} color="#e4ecf4" position={[-3.4, 1.1, 1.6]} scale={[1.1, 5, 1]} />
-        <Lightformer form="rect" intensity={1.7} color="#c8d4e2" position={[3.4, 1.1, -1.1]} scale={[1.1, 5, 1]} />
-        <Lightformer form="rect" intensity={0.9} color="#aebccd" position={[0, -2.4, 2.2]} scale={[6, 2, 1]} />
+        <Lightformer form="rect" intensity={6.2} color="#ffffff" position={[1.2, 3.6, 2.4]} scale={[7, 3.2, 1]} />
+        <Lightformer form="rect" intensity={2.6} color="#e4ecf4" position={[-3.4, 1.1, 1.6]} scale={[1.1, 5, 1]} />
+        <Lightformer form="rect" intensity={1.5} color="#c8d4e2" position={[3.4, 1.1, -1.1]} scale={[1.1, 5, 1]} />
+        <Lightformer form="rect" intensity={0.85} color="#aebccd" position={[0, -2.4, 2.2]} scale={[6, 2, 1]} />
       </Environment>
-      <ambientLight intensity={0.22} />
-      <directionalLight position={[1.8, 3.4, 2.6]} intensity={0.55} />
+      <ambientLight intensity={0.18} />
+      <directionalLight position={[1.6, 3.6, 2.8]} intensity={0.7} />
     </>
   );
 }
@@ -91,20 +91,30 @@ function Wordmark({ text }: { text: string }) {
 export function NeobotCanvas({
   wordmark,
   loadingLabel,
+  sceneLabel,
   fallbackLabel,
+  fallbackAlt,
 }: {
   wordmark: string;
   loadingLabel: string;
+  sceneLabel: string;
   fallbackLabel: string;
+  fallbackAlt: string;
 }) {
   return (
     <CanvasShell
       className="neobot-canvas"
-      fallback={<p className="neobot-fallback">{fallbackLabel}</p>}
+      fallback={
+        <div className="neobot-fallback-still">
+          <img src="/lab/nexbot-still.jpg" alt={fallbackAlt} />
+          <p className="neobot-fallback">{fallbackLabel}</p>
+        </div>
+      }
       eager
       clearColor={0xdce2ea}
-      camera={{ position: [0, 0, 2.45], fov: 30 }}
-      aria-label={loadingLabel}
+      camera={{ position: [0, 0.04, 1.95], fov: 28 }}
+      role="img"
+      aria-label={sceneLabel || loadingLabel}
     >
       <ToneMap />
       <StudioRig />
@@ -123,8 +133,8 @@ export function NeobotCanvas({
         />
       </group>
       <EffectComposer enableNormalPass={false} multisampling={0}>
-        <Bloom luminanceThreshold={0.9} mipmapBlur intensity={0.7} radius={0.55} />
-        <DepthOfField target={[0, 0.06, 0]} focalLength={0.018} bokehScale={2.4} height={480} />
+        <Bloom luminanceThreshold={0.88} mipmapBlur intensity={0.55} radius={0.4} />
+        <DepthOfField target={[0, 0.06, 0]} focalLength={0.018} bokehScale={1.1} height={480} />
         <Vignette offset={0.28} darkness={0.3} />
       </EffectComposer>
     </CanvasShell>
