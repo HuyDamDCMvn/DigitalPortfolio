@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /welcome
+Disallow: /lab/
+
+Sitemap: https://digital-portfolio-olive-ten.vercel.app/sitemap.xml
