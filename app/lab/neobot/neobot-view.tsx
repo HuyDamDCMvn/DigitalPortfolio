@@ -114,6 +114,8 @@ function enterPortfolio() {
   window.location.assign("/");
 }
 
+const DCMVN = "https://dcmvn.com/";
+
 function CosmosBackdrop() {
   return (
     <div className="neobot-cosmos" aria-hidden="true">
@@ -132,7 +134,13 @@ function NeobotStage() {
   return (
     <div className="neobot-stage">
       <CosmosBackdrop />
-      <a className="neobot-stage-logo" href="/" aria-label={t.brandHome}>
+      <a
+        className="neobot-stage-logo"
+        href={DCMVN}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.neobot.logoGo}
+      >
         <img src="/images/bkw-dcm-lockup.png" alt={t.brandAlt} />
       </a>
       <div className="neobot-welcome-tools">

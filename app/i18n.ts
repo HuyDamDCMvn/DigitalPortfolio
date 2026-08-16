@@ -347,6 +347,7 @@ export const messages = {
       back: "Portfolio",
       labCta: "Orbit assembled hub",
       hangCta: "Hang parts on the page",
+      logoGo: "Open dcmvn.com",
     },
     cardsLab: {
       eyebrow: "Lab · Spline study",
@@ -946,6 +947,7 @@ export const messages = {
       back: "Portfolio",
       labCta: "Xoay hub đã lắp",
       hangCta: "Treo bộ phận lên trang",
+      logoGo: "Mở dcmvn.com",
     },
     cardsLab: {
       eyebrow: "Lab · nghiên cứu Spline",
