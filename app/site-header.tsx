@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { useLocale } from "./locale-provider";
 
 const NAV = [
+  { href: "/welcome", key: "welcome" },
   { href: "#story", key: "story" },
   { href: "#capabilities", key: "capabilities" },
   { href: "#training", key: "training" },

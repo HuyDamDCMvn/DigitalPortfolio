@@ -53,6 +53,9 @@ export function HomeView() {
               <a className="button button-primary" href="#capabilities">
                 {t.hero.explore}
               </a>
+              <a className="button button-ghost" href="/welcome">
+                {t.nav.welcome}
+              </a>
               <a
                 className="button button-ghost"
                 href={TEAM_PAGE}

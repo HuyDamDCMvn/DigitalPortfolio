@@ -74,8 +74,11 @@ function CardsLabView() {
         </div>
         <div className="parts-header-tools">
           <LangToggle />
-          <a className="r3f-lab-back" href="/lab/neobot">
+          <a className="r3f-lab-back" href="/welcome">
             {t.hang.neobotCta}
+          </a>
+          <a className="r3f-lab-back" href="/lab/particles">
+            {t.hang.particlesCta}
           </a>
           <a className="r3f-lab-back" href="/">
             ← {t.cardsLab.back}

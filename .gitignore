@@ -44,6 +44,8 @@ _munich_*
 
 # Blender kit MCP
 /mcp/blender/.venv/
+.tmp-brain-meshes/
+.tmp-nexbot/
 /mcp/blender/.tmp/
 /mcp/blender/**/__pycache__/
 /mcp/blender/**/*.egg-info/

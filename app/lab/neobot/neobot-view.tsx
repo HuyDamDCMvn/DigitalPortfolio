@@ -1,20 +1,128 @@
 "use client";
 
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
 import { LocaleProvider, useLocale } from "../../locale-provider";
-import { NeobotCanvas } from "./scene";
+import { NeobotSplineStage } from "./spline-stage";
 import "../r3f/lab.css";
 import "./neobot.css";
 
-function LangToggle() {
-  const { locale, setLocale, t } = useLocale();
+gsap.registerPlugin(useGSAP);
+
+function DigitalWordmark() {
+  const { t } = useLocale();
+  const linkRef = useRef<HTMLAnchorElement>(null);
+
+  useGSAP(
+    () => {
+      const node = linkRef.current;
+      const inner = node?.querySelector<HTMLElement>(".neobot-wordmark-inner");
+      const face = node?.querySelector<HTMLElement>(".neobot-wordmark-face");
+      if (!node || !inner || !face) return;
+
+      const shine = { x: 28, y: 22, spot: 0 };
+      const applyShine = () => {
+        face.style.setProperty("--mx", `${shine.x}%`);
+        face.style.setProperty("--my", `${shine.y}%`);
+        face.style.setProperty("--spot", String(shine.spot));
+      };
+      applyShine();
+      const xTo = gsap.quickTo(shine, "x", { duration: 0.12, ease: "power3.out", onUpdate: applyShine });
+      const yTo = gsap.quickTo(shine, "y", { duration: 0.12, ease: "power3.out", onUpdate: applyShine });
+      const spotTo = gsap.quickTo(shine, "spot", { duration: 0.2, ease: "power2.out", onUpdate: applyShine });
+      const clamp = gsap.utils.clamp(0, 100);
+
+      const onMove = (event: PointerEvent) => {
+        const box = face.getBoundingClientRect();
+        if (box.width < 1 || box.height < 1) return;
+        xTo(clamp(((event.clientX - box.left) / box.width) * 100));
+        yTo(clamp(((event.clientY - box.top) / box.height) * 100));
+      };
+      const onEnterShine = () => spotTo(1);
+      const onLeaveShine = () => spotTo(0);
+
+      node.addEventListener("pointermove", onMove);
+      node.addEventListener("pointerenter", onEnterShine);
+      node.addEventListener("pointerleave", onLeaveShine);
+
+      const mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(inner, { y: 0, scale: 1, opacity: 1 });
+      });
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.fromTo(
+          inner,
+          { y: 22, scale: 0.86, opacity: 0 },
+          { y: 0, scale: 1, opacity: 1, duration: 0.85, ease: "back.out(1.7)" },
+        );
+        const float = gsap.to(inner, {
+          y: -8,
+          duration: 2.2,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+          delay: 0.85,
+        });
+        const onEnter = () => {
+          float.pause();
+          gsap.to(inner, { y: -14, scale: 1.08, duration: 0.28, ease: "power2.out" });
+        };
+        const onLeave = () => {
+          gsap.to(inner, {
+            y: -8,
+            scale: 1,
+            duration: 0.32,
+            ease: "power2.out",
+            onComplete: () => float.resume(),
+          });
+        };
+        node.addEventListener("pointerenter", onEnter);
+        node.addEventListener("pointerleave", onLeave);
+        node.addEventListener("focus", onEnter);
+        node.addEventListener("blur", onLeave);
+        return () => {
+          node.removeEventListener("pointerenter", onEnter);
+          node.removeEventListener("pointerleave", onLeave);
+          node.removeEventListener("focus", onEnter);
+          node.removeEventListener("blur", onLeave);
+        };
+      });
+
+      return () => {
+        node.removeEventListener("pointermove", onMove);
+        node.removeEventListener("pointerenter", onEnterShine);
+        node.removeEventListener("pointerleave", onLeaveShine);
+        mm.revert();
+      };
+    },
+    { scope: linkRef },
+  );
+
   return (
-    <div className="site-lang" role="group" aria-label={t.langGroup}>
-      <button type="button" className={locale === "en" ? "is-active" : ""} onClick={() => setLocale("en")}>
-        EN
-      </button>
-      <button type="button" className={locale === "vi" ? "is-active" : ""} onClick={() => setLocale("vi")}>
-        VI
-      </button>
+    <a ref={linkRef} className="neobot-wordmark" href="/" aria-label={t.neobot.wordmarkGo}>
+      <span className="neobot-wordmark-inner">
+        <span className="neobot-wordmark-depth" aria-hidden="true">
+          {t.neobot.wordmark}
+        </span>
+        <span className="neobot-wordmark-face">{t.neobot.wordmark}</span>
+      </span>
+    </a>
+  );
+}
+
+function enterPortfolio() {
+  window.location.assign("/");
+}
+
+function CosmosBackdrop() {
+  return (
+    <div className="neobot-cosmos" aria-hidden="true">
+      <div className="neobot-cosmos-nebula" />
+      <div className="neobot-cosmos-stars" />
+      <div className="neobot-cosmos-stars is-drift" />
+      <div className="neobot-cosmos-grid" />
+      <div className="neobot-cosmos-horizon" />
     </div>
   );
 }
@@ -24,13 +132,19 @@ function NeobotStage() {
 
   return (
     <div className="neobot-stage">
-      <p className="neobot-wordmark" aria-hidden="true">
-        {t.neobot.wordmark}
-      </p>
-      <NeobotCanvas
-        wordmark={t.neobot.wordmark}
+      <CosmosBackdrop />
+      <a className="neobot-stage-logo" href="/" aria-label={t.brandHome}>
+        <img src="/images/bkw-dcm-lockup.png" alt={t.brandAlt} />
+      </a>
+      <div className="neobot-welcome-tools">
+        <DigitalWordmark />
+      </div>
+      <NeobotSplineStage
         loadingLabel={t.neobot.loading}
+        sceneLabel={t.neobot.sceneLabel}
         fallbackLabel={t.neobot.fallback}
+        fallbackAlt={t.neobot.fallbackAlt}
+        onActivate={enterPortfolio}
       />
     </div>
   );
@@ -45,32 +159,10 @@ function NeobotView() {
         {t.skip}
       </a>
 
-      <header className="r3f-lab-header">
-        <div>
-          <p className="r3f-lab-eyebrow">{t.neobot.eyebrow}</p>
-          <h1>{t.neobot.title}</h1>
-          <p className="r3f-lab-copy">{t.neobot.copy}</p>
-        </div>
-        <div className="parts-header-tools">
-          <LangToggle />
-          <a className="r3f-lab-back" href="/lab/r3f">
-            {t.neobot.labCta}
-          </a>
-          <a className="r3f-lab-back" href="/lab/cards">
-            {t.hang.cardsCta}
-          </a>
-          <a className="r3f-lab-back" href="/lab/parts">
-            {t.neobot.hangCta}
-          </a>
-          <a className="r3f-lab-back" href="/">
-            ← {t.neobot.back}
-          </a>
-        </div>
-      </header>
-
-      <NeobotStage />
-
-      <p className="neobot-hint">{t.neobot.hint}</p>
+      <section className="neobot-welcome" aria-label={t.neobot.title}>
+        <h1 className="neobot-welcome-title">{t.neobot.title}</h1>
+        <NeobotStage />
+      </section>
 
       <section id="neobot-layers" className="neobot-notes">
         <h2>{t.neobot.layersHeading}</h2>
@@ -103,19 +195,20 @@ function NeobotView() {
             <h2>{t.neobot.where}</h2>
             <ul>
               <li>
-                <code>public/models/neobot.glb</code>
+                <a href="https://community.spline.design/file/615b9422-9985-43f6-8593-d7d7bc3b0be1">
+                  Spline · NEXBOT (CC0)
+                </a>
               </li>
               <li>
-                <code>scripts/blender/components/neobot.py</code>
+                <code>app/lab/neobot/spline-stage.tsx</code>
               </li>
               <li>
-                <code>app/lab/neobot/robot.tsx</code>
+                <code>app/i18n.ts</code>
+                {" — "}
+                <code>neobot.wordmark</code>
               </li>
               <li>
-                <code>app/lab/neobot/scene.tsx</code>
-              </li>
-              <li>
-                <code>app/lab/neobot/neobot-view.tsx</code>
+                <code>public/models/nexbot.splinecode</code>
               </li>
             </ul>
           </section>

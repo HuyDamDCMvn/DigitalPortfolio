@@ -19,7 +19,7 @@ function LeadView() {
           <a className="r3f-lab-back" href="/lab/parts">
             {t.hang.hangCta}
           </a>
-          <a className="r3f-lab-back" href="/lab/neobot">
+          <a className="r3f-lab-back" href="/welcome">
             {t.hang.neobotCta}
           </a>
           <a className="r3f-lab-back" href="/lab/r3f">
