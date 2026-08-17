@@ -2,16 +2,61 @@
 
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LocaleProvider, useLocale } from "../../locale-provider";
-import { NeobotSplineStage } from "./spline-stage";
+import { NeobotSplineStage, type NeobotEyeMode } from "./spline-stage";
 import "./neobot.css";
 
 gsap.registerPlugin(useGSAP);
 
-function DigitalWordmark() {
+const TOUCH_NAV_MS = 300;
+
+function isTouchLike(pointerType: string) {
+  if (pointerType === "touch") return true;
+  if (pointerType === "mouse" || pointerType === "keyboard") return false;
+  return window.matchMedia("(pointer: coarse)").matches;
+}
+
+function enterPortfolio() {
+  window.location.assign("/");
+}
+
+function DigitalWordmark({
+  gagReady,
+  onEyesEngage,
+  onEyesDisengage,
+}: {
+  gagReady: boolean;
+  onEyesEngage: () => void;
+  onEyesDisengage: () => void;
+}) {
   const { t } = useLocale();
   const linkRef = useRef<HTMLAnchorElement>(null);
+  const lastPointerRef = useRef("");
+  const touchCommitRef = useRef(false);
+  const navTimerRef = useRef<number>(0);
+  const engageRef = useRef(onEyesEngage);
+  const disengageRef = useRef(onEyesDisengage);
+  const gagReadyRef = useRef(gagReady);
+
+  engageRef.current = onEyesEngage;
+  disengageRef.current = onEyesDisengage;
+  gagReadyRef.current = gagReady;
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(navTimerRef.current);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const node = linkRef.current;
+    if (!gagReady || !node) return;
+    if (node.matches(":hover") || document.activeElement === node) {
+      engageRef.current();
+    }
+  }, [gagReady]);
 
   useGSAP(
     () => {
@@ -98,8 +143,54 @@ function DigitalWordmark() {
     { scope: linkRef },
   );
 
+  const engage = () => {
+    if (!gagReadyRef.current) return;
+    engageRef.current();
+  };
+
+  const disengage = () => {
+    if (touchCommitRef.current) return;
+    disengageRef.current();
+  };
+
   return (
-    <a ref={linkRef} className="neobot-wordmark" href="/" aria-label={t.neobot.wordmarkGo}>
+    <a
+      ref={linkRef}
+      className="neobot-wordmark"
+      href="/"
+      aria-label={t.neobot.wordmarkGo}
+      onPointerEnter={() => {
+        engage();
+      }}
+      onPointerDown={(event) => {
+        lastPointerRef.current = event.pointerType;
+        engage();
+      }}
+      onPointerLeave={() => {
+        disengage();
+      }}
+      onPointerCancel={() => {
+        lastPointerRef.current = "";
+        disengage();
+      }}
+      onFocus={() => {
+        engage();
+      }}
+      onBlur={() => {
+        disengage();
+      }}
+      onClick={(event) => {
+        const touchNav = event.detail !== 0 && isTouchLike(lastPointerRef.current);
+        if (!touchNav || !gagReadyRef.current) return;
+        event.preventDefault();
+        touchCommitRef.current = true;
+        engageRef.current();
+        window.clearTimeout(navTimerRef.current);
+        navTimerRef.current = window.setTimeout(() => {
+          enterPortfolio();
+        }, TOUCH_NAV_MS);
+      }}
+    >
       <span className="neobot-wordmark-inner">
         <span className="neobot-wordmark-depth" aria-hidden="true">
           {t.neobot.wordmark}
@@ -108,10 +199,6 @@ function DigitalWordmark() {
       </span>
     </a>
   );
-}
-
-function enterPortfolio() {
-  window.location.assign("/");
 }
 
 const DCMVN = "https://dcmvn.com/";
@@ -130,6 +217,15 @@ function CosmosBackdrop() {
 
 function NeobotStage() {
   const { t } = useLocale();
+  const [eyeMode, setEyeMode] = useState<NeobotEyeMode>("rest");
+  const [splineReady, setSplineReady] = useState(false);
+  const eyeModeRef = useRef<NeobotEyeMode>("rest");
+  eyeModeRef.current = eyeMode;
+
+  const setMode = (mode: NeobotEyeMode) => {
+    eyeModeRef.current = mode;
+    setEyeMode(mode);
+  };
 
   return (
     <div className="neobot-stage">
@@ -140,18 +236,40 @@ function NeobotStage() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label={t.neobot.logoGo}
+        onPointerEnter={() => {
+          if (!splineReady) return;
+          setMode("green");
+        }}
+        onPointerLeave={() => {
+          if (eyeModeRef.current === "green") setMode("rest");
+        }}
+        onFocus={() => {
+          if (!splineReady) return;
+          setMode("green");
+        }}
+        onBlur={() => {
+          if (eyeModeRef.current === "green") setMode("rest");
+        }}
       >
         <img src="/images/bkw-dcm-lockup.png" alt={t.brandAlt} />
       </a>
       <div className="neobot-welcome-tools">
-        <DigitalWordmark />
+        <DigitalWordmark
+          gagReady={splineReady}
+          onEyesEngage={() => setMode("cyan")}
+          onEyesDisengage={() => {
+            if (eyeModeRef.current === "cyan") setMode("rest");
+          }}
+        />
       </div>
       <NeobotSplineStage
         loadingLabel={t.neobot.loading}
         sceneLabel={t.neobot.sceneLabel}
         fallbackLabel={t.neobot.fallback}
         fallbackAlt={t.neobot.fallbackAlt}
+        eyeMode={eyeMode}
         onActivate={enterPortfolio}
+        onSceneReady={setSplineReady}
       />
     </div>
   );

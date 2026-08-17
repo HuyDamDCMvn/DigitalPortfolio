@@ -1,4 +1,7 @@
 .neobot-page {
+  --nexbot-eye-lit: #5fc7ec;
+  --nexbot-eye-glow: #83ddfa;
+  --nexbot-eye-green: #3dcf6a;
   min-height: 100svh;
   background: #031733;
   color: #e8f4fb;
