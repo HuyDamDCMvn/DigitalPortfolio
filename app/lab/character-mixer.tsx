@@ -27,11 +27,14 @@ export function CharacterMixer({
   clips,
   clip = "idle",
   active = true,
+  frozen = false,
 }: {
   root: Object3D;
   clips: AnimationClip[];
   clip?: IdleClip;
   active?: boolean;
+  /** Apply the clip pose once (end of clip) and do not tick. */
+  frozen?: boolean;
 }) {
   const mixerRef = useRef<AnimationMixer | null>(null);
 
@@ -43,8 +46,15 @@ export function CharacterMixer({
       const found = findClip(clips, name);
       if (found) {
         const action = mixer.clipAction(found);
-        action.setLoop(LoopRepeat, Infinity);
-        action.play();
+        if (frozen) {
+          action.play();
+          action.time = found.duration;
+          action.paused = true;
+          mixer.update(0);
+        } else {
+          action.setLoop(LoopRepeat, Infinity);
+          action.play();
+        }
       }
     }
     return () => {
@@ -52,10 +62,10 @@ export function CharacterMixer({
       mixer.uncacheRoot(root);
       mixerRef.current = null;
     };
-  }, [root, clips, clip]);
+  }, [root, clips, clip, frozen]);
 
   useFrame((_, delta) => {
-    if (!active) return;
+    if (!active || frozen) return;
     mixerRef.current?.update(delta);
   });
 

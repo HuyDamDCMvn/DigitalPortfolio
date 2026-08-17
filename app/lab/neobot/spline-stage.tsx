@@ -1,20 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { usePrefersReducedMotion } from "../../r3f/hooks";
+import { probeWebGL, usePrefersReducedMotion } from "../../r3f/hooks";
 
 /** Self-hosted CC0 NEXBOT export — no baked wordmark, so the page can set Digital. */
 const SCENE_URL = "/models/nexbot.splinecode";
 const TAP_PX = 10;
-
-function webglOk() {
-  try {
-    const probe = document.createElement("canvas");
-    return !!(probe.getContext("webgl") || probe.getContext("experimental-webgl"));
-  } catch {
-    return false;
-  }
-}
 
 export function NeobotSplineStage({
   sceneLabel,
@@ -44,7 +35,7 @@ export function NeobotSplineStage({
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
-    if (!webglOk()) {
+    if (!probeWebGL()) {
       onFail();
       return;
     }
@@ -115,7 +106,7 @@ export function NeobotSplineStage({
     };
   }, [failed, ready, reduced]);
 
-  if (reduced || failed) {
+  if (reduced || failed || !probeWebGL()) {
     return (
       <a className="neobot-fallback-still" href="/" aria-label={sceneLabel}>
         <img src="/lab/nexbot-still.jpg" alt={fallbackAlt} />

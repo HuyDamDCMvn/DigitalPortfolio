@@ -69,6 +69,8 @@ type LabPartProps = Omit<ThreeElements["group"], "id"> & {
   rotationY?: number;
   seed?: number;
   idle?: boolean;
+  /** When false, mixer characters keep a Sit/Idle pose and do not tick. */
+  live?: boolean;
   clip?: IdleClip;
   names?: "all" | readonly string[];
   look?: FigureLook;
@@ -89,6 +91,7 @@ export function LabPart({
   rotation,
   seed = 0,
   idle = true,
+  live = true,
   clip,
   names = "all",
   look,
@@ -149,7 +152,13 @@ export function LabPart({
         ) : null}
       </group>
       {mixer ? (
-        <CharacterMixer root={part} clips={animations} clip={usedClip} active={idle} />
+        <CharacterMixer
+          root={part}
+          clips={animations}
+          clip={usedClip}
+          active={idle && live}
+          frozen={!live}
+        />
       ) : (
         <ModelIdle root={part} seed={seed} clip={usedClip} bobRef={motionRef} />
       )}

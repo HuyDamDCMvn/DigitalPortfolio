@@ -12,6 +12,7 @@ export const messages = {
     brandAlt: "BKW Engineering — Digital Construction Management",
     dcmvn: "dcmvn.com",
     nav: {
+      primary: "Primary",
       welcome: "Digital Welcome",
       story: "Story",
       capabilities: "Capabilities",
@@ -167,6 +168,7 @@ export const messages = {
       ],
       familyAria: "Open Revit Family App",
       surveyAria: "Open MEP Revit Skills Survey",
+      skillTags: ["Documentation", "Worksharing", "Families", "Management", "Modeling", "Parameters", "Views"],
     },
     automation: {
       eyebrow: "Automation",
@@ -314,7 +316,7 @@ export const messages = {
     lab: {
       eyebrow: "Lab · not linked from portfolio",
       title: "Collaborative BIM hub · separate 3D parts",
-      copy: "Octagon table, eight chairs, seven vinyl sitters, and one remote laptop on the empty seat. Hover a person — or the hologram city — to light them up. Same kit: metres, floor y = 0, front +Z.",
+      copy: "Octagon table, eight chairs, seven vinyl sitters (three animated, four still), and one remote laptop on the empty seat. Hover a person — or the hologram city — to light them up. Same kit: metres, floor y = 0, front +Z.",
       back: "Portfolio",
       where: "Where to edit",
       parts: "3D components",
@@ -448,7 +450,7 @@ export const messages = {
     lead: {
       eyebrow: "Lab · from story-04-lead.png",
       title: "Digital Lead · separate 3D parts",
-      copy: "Same octagon meeting as the hub: eight chairs, seven sitters, one remote laptop, hologram in the well. The lead dashboard still stands behind. Same kit: metres, floor y = 0, front +Z.",
+      copy: "Same octagon meeting as the hub: eight chairs, seven sitters (three animated, four still), one remote laptop, hologram in the well. The lead dashboard still stands behind. Same kit: metres, floor y = 0, front +Z.",
       back: "Portfolio",
       where: "Where to edit",
       parts: "3D components",
@@ -459,7 +461,7 @@ export const messages = {
         { code: "HoloCity", label: "Hex projector in the well: metallic base, campus hologram, floating UI" },
         { code: "Laptop", label: "Remote seat laptop" },
         { code: "LeadDashboard", label: "Board plus Arch, Struct and MEP models" },
-        { code: "CharNavyBomber", label: "Same seven vinyl sitters as the hub" },
+        { code: "CharNavyBomber", label: "Same seven vinyl sitters as the hub (three animated, four still)" },
       ],
     },
     hang: {
@@ -612,6 +614,7 @@ export const messages = {
     brandAlt: "BKW Engineering — Digital Construction Management",
     dcmvn: "dcmvn.com",
     nav: {
+      primary: "Điều hướng chính",
       welcome: "Digital Welcome",
       story: "Câu chuyện",
       capabilities: "Năng lực",
@@ -767,6 +770,7 @@ export const messages = {
       ],
       familyAria: "Mở ứng dụng Revit Family",
       surveyAria: "Mở khảo sát kỹ năng MEP Revit",
+      skillTags: ["Hồ sơ", "Worksharing", "Family", "Quản lý", "Mô hình hóa", "Parameter", "View"],
     },
     automation: {
       eyebrow: "Tự động hóa",
@@ -914,7 +918,7 @@ export const messages = {
     lab: {
       eyebrow: "Lab · không gắn từ portfolio",
       title: "Hub BIM cộng tác · từng bộ phận 3D riêng",
-      copy: "Bàn bát giác, tám ghế, bảy người vinyl ngồi, và một laptop remote ở ghế trống. Rê chuột lên người — hoặc thành phố hologram — để sáng lên. Cùng một kit: mét, sàn y = 0, mặt trước +Z.",
+      copy: "Bàn bát giác, tám ghế, bảy người vinyl ngồi (ba cử động, bốn đứng yên), và một laptop remote ở ghế trống. Rê chuột lên người — hoặc thành phố hologram — để sáng lên. Cùng một kit: mét, sàn y = 0, mặt trước +Z.",
       back: "Portfolio",
       where: "Chỗ chỉnh",
       parts: "Bộ phận 3D",
@@ -1048,7 +1052,7 @@ export const messages = {
     lead: {
       eyebrow: "Lab · từ story-04-lead.png",
       title: "Digital Lead · từng bộ phận 3D riêng",
-      copy: "Cùng bàn họp bát giác với hub: tám ghế, bảy người ngồi, một laptop remote, hologram trong giếng. Bảng dashboard Lead vẫn đứng phía sau. Cùng kit: mét, sàn y = 0, mặt trước +Z.",
+      copy: "Cùng bàn họp bát giác với hub: tám ghế, bảy người ngồi (ba cử động, bốn đứng yên), một laptop remote, hologram trong giếng. Bảng dashboard Lead vẫn đứng phía sau. Cùng kit: mét, sàn y = 0, mặt trước +Z.",
       back: "Portfolio",
       where: "Chỗ chỉnh",
       parts: "Bộ phận 3D",
@@ -1059,7 +1063,7 @@ export const messages = {
         { code: "HoloCity", label: "Máy chiếu hex trong giếng: đế kim loại, campus hologram, UI lơ lửng" },
         { code: "Laptop", label: "Laptop ghế remote" },
         { code: "LeadDashboard", label: "Bảng cộng Arch, Struct và MEP" },
-        { code: "CharNavyBomber", label: "Cùng bảy người vinyl với hub" },
+        { code: "CharNavyBomber", label: "Cùng bảy người vinyl với hub (ba cử động, bốn đứng yên)" },
       ],
     },
     hang: {

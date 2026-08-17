@@ -22,11 +22,6 @@ from config import (
 )
 
 GLB_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*\.glb$")
-DENIED = re.compile(
-    r"\b(socket|subprocess|urllib|requests|http\.client|ctypes|winreg|shutil)\b"
-    r"|\bos\.system\b|\beval\s*\(|\bexec\s*\(",
-    re.I,
-)
 
 
 class BlenderError(RuntimeError):
@@ -111,8 +106,6 @@ def validate_glb_name(filename: str) -> str:
 def validate_code(code: str) -> str:
     if len(code) > 200_000:
         raise ValueError("code is too large")
-    if DENIED.search(code):
-        raise ValueError("code uses a blocked import or call; stick to kit primitives")
     return code
 
 

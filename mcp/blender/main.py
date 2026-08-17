@@ -47,7 +47,9 @@ mcp = FastMCP(
         "Furniture: kit_catalog, kit_run, kit_export. "
         "Characters: char_catalog, char_stage, char_inspect, char_preview, char_export. "
         "Do not kit_run armatures. Author in metres, Y up, +Z forward, floor at y=0. "
-        "Hub and lead meeting layout is OctTable: 8 chairs, 7 sitters, 1 remote laptop."
+        "Hub and lead meeting layout is OctTable: 8 chairs, 7 sitters, 1 remote laptop. "
+        "kit_run is trusted local Python with the same rights as a shell on this machine — not a sandbox. "
+        "Code is size-capped (200_000 characters) and writes kebab-case .glb names under public/models."
     ),
 )
 
@@ -96,6 +98,9 @@ def kit_export(only: str | None = None) -> dict:
 @mcp.tool
 def kit_run(code: str, filename: str, preview: bool = True, overwrite: bool = True) -> dict:
     """Run kit Python inside headless Blender and write public/models/<filename>.
+
+    Trusted local: this is not a sandbox. Code runs with the same rights as a
+    shell on this machine. Size is capped at 200_000 characters.
 
     `code` must assign `root`. Coordinates are Three.js metres (Y up, +Z forward).
     `mat` is already defined. Example:

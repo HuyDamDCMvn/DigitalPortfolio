@@ -37,9 +37,10 @@ export function HomeView() {
   const { t } = useLocale();
 
   return (
-    <PageMotion>
-      <main id="top">
-        <SiteHeader />
+    <PageMotion id="top">
+      <SiteHeader />
+
+      <main id="content">
 
         <section className="hero">
           <div className="hero-grid" />
@@ -208,11 +209,9 @@ export function HomeView() {
                   <a href="/skills-survey">{t.skillsSurvey}</a>
                 </div>
                 <div className="skill-cloud">
-                  {["Documentation", "Worksharing", "Families", "Management", "Modeling", "Parameters", "Views"].map(
-                    (skill) => (
-                      <span key={skill}>{skill}</span>
-                    ),
-                  )}
+                  {t.training.skillTags.map((skill) => (
+                    <span key={skill}>{skill}</span>
+                  ))}
                 </div>
                 <p className="training-note">{t.training.revitNote}</p>
               </article>

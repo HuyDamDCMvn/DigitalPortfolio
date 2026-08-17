@@ -10,6 +10,8 @@ export const OCT_SLOT_OFFSET = 0;
 export const OCT_CHAIR_R = 1.64;
 export const OCT_LAPTOP_R = 1.08;
 export const OCT_REMOTE_SEAT = 7;
+/** Mixer ticks only on these sitter seats (0–6). The rest freeze a Sit pose. */
+export const HUB_LIVE_SEATS = new Set([0, 3, 5]);
 /** Hover the hex campus above the well — larger than the hole, slow bob. */
 export const OCT_HOLO_DROP = 0.13;
 export const OCT_HOLO_SCALE = 1.52;
@@ -32,11 +34,20 @@ function OctSeat({ index }: { index: number }) {
   const chair = octSlot(index, OCT_CHAIR_R);
   const isRemote = index === OCT_REMOTE_SEAT;
   const charId = isRemote ? null : HUB_CHAR_IDS[index];
+  const live = HUB_LIVE_SEATS.has(index);
   return (
     <group>
       <LabPart id="OfficeChair" seed={index * 0.41} position={chair.position} rotationY={chair.yaw} pick={false} />
       {charId ? (
-        <LabPart id={charId} seed={index * 0.73} position={chair.position} rotationY={chair.yaw} clip="sit" glowOnHover>
+        <LabPart
+          id={charId}
+          seed={index * 0.73}
+          position={chair.position}
+          rotationY={chair.yaw}
+          clip="sit"
+          live={live}
+          glowOnHover
+        >
           <mesh visible={false} position={[0, 0.42, 0.02]}>
             <capsuleGeometry args={[0.2, 0.38, 4, 8]} />
           </mesh>
@@ -55,7 +66,7 @@ function OctSeat({ index }: { index: number }) {
   );
 }
 
-/** Octagon table + 8 chairs + 7 sitters + 1 remote laptop + hologram well. */
+/** Octagon table + 8 chairs + 7 sitters (3 live, 4 still Sit) + 1 remote laptop + hologram well. */
 export function MeetingHub({ holoHover = true }: { holoHover?: boolean }) {
   return (
     <group>

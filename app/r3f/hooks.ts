@@ -2,8 +2,22 @@
 
 import { useEffect, useState, type RefObject } from "react";
 
+let webglCached: boolean | null = null;
+
+export function probeWebGL() {
+  if (typeof document === "undefined") return false;
+  if (webglCached !== null) return webglCached;
+  try {
+    const canvas = document.createElement("canvas");
+    webglCached = !!(canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
+  } catch {
+    webglCached = false;
+  }
+  return webglCached;
+}
+
 export function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(true);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");

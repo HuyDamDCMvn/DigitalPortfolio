@@ -12,6 +12,7 @@ import {
 import { LOCALE_STORAGE_KEY, messages, type Locale, type Messages } from "./i18n";
 
 const listeners = new Set<() => void>();
+let currentLocale: Locale | null = null;
 
 function emit() {
   for (const listener of listeners) listener();
@@ -19,21 +20,30 @@ function emit() {
 
 export function subscribeLocale(listener: () => void) {
   listeners.add(listener);
-  window.addEventListener("storage", listener);
+  const onStorage = () => {
+    currentLocale = null;
+    listener();
+  };
+  window.addEventListener("storage", onStorage);
   return () => {
     listeners.delete(listener);
-    window.removeEventListener("storage", listener);
+    window.removeEventListener("storage", onStorage);
   };
 }
 
 export function readLocale(): Locale {
+  if (currentLocale) return currentLocale;
   try {
     const saved = localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (saved === "en" || saved === "vi") return saved;
+    if (saved === "en" || saved === "vi") {
+      currentLocale = saved;
+      return saved;
+    }
   } catch {
     /* ignore */
   }
-  return "en";
+  currentLocale = "en";
+  return currentLocale;
 }
 
 export function getServerLocale(): Locale {
@@ -41,6 +51,7 @@ export function getServerLocale(): Locale {
 }
 
 export function writeLocale(locale: Locale) {
+  currentLocale = locale;
   try {
     localStorage.setItem(LOCALE_STORAGE_KEY, locale);
   } catch {

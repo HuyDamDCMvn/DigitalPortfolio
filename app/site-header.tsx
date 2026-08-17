@@ -59,14 +59,14 @@ export function SiteHeader() {
 
   return (
     <>
-      <a className="skip-link" href="#story">
+      <a className="skip-link" href="#content">
         {t.skip}
       </a>
       <header className="site-header">
         <a className="brand" href="#top" aria-label={t.brandHome}>
           <img src="/images/bkw-dcm-logo.svg" alt={t.brandAlt} />
         </a>
-        <nav className="site-nav-desktop" aria-label="Primary">
+        <nav className="site-nav-desktop" aria-label={t.nav.primary}>
           {NAV.map((item) => (
             <a key={item.href} href={item.href}>
               {t.nav[item.key]}
@@ -121,7 +121,7 @@ export function SiteHeader() {
             aria-modal="true"
             aria-label={t.menu}
           >
-            <nav aria-label="Primary">
+            <nav aria-label={t.nav.primary}>
               {NAV.map((item) => (
                 <a key={item.href} href={item.href} onClick={closeAndGo}>
                   {t.nav[item.key]}

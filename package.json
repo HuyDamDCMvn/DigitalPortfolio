@@ -17,8 +17,7 @@
     "models:walker": "node ./scripts/build-walker-glb.mjs",
     "models:lead": "node ./scripts/build-digital-lead-glb.mjs",
     "models:blender": "node ./scripts/build-blender-lib.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
@@ -28,7 +27,6 @@
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.12.98",
     "@vercel/speed-insights": "^2.0.0",
-    "drizzle-orm": "0.45.2",
     "gsap": "^3.15.0",
     "nitro": "3.0.260610-beta",
     "react": "19.2.6",
@@ -47,7 +45,6 @@
     "@types/three": "^0.185.4",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
-    "drizzle-kit": "0.31.10",
     "eslint": "9.39.4",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",

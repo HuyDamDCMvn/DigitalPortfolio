@@ -1118,6 +1118,28 @@ footer p:last-child { text-transform: uppercase; letter-spacing: .12em; }
   font-size: 12px;
   font-weight: 700;
 }
+.skills-survey-blocked {
+  margin: 0;
+  padding: 12px 18px;
+  background: #fdecea;
+  color: #6b1c14;
+  border-bottom: 1px solid #e0b4b0;
+}
+.skills-survey-blocked strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.skills-survey-blocked p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.skills-survey.is-blocked .is-score button:disabled,
+.skills-survey.is-blocked .skill-card-scores button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
 .skills-survey-lang {
   display: flex;
   overflow: hidden;
@@ -1273,6 +1295,9 @@ footer p:last-child { text-transform: uppercase; letter-spacing: .12em; }
 .matrix-id {
   display: grid;
   gap: 4px;
+  margin: 0;
+  min-width: 0;
+  min-inline-size: 0;
   padding: 6px 8px;
   border: 1px solid #111;
   font-size: 12px;
@@ -1613,6 +1638,7 @@ footer p:last-child { text-transform: uppercase; letter-spacing: .12em; }
     margin: 8mm;
   }
   .skills-survey-bar,
+  .skills-survey-blocked,
   .matrix-actions,
   .matrix-tip,
   .skills-survey-lang,

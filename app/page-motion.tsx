@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-export function PageMotion({ children }: { children: ReactNode }) {
+export function PageMotion({ children, id }: { children: ReactNode; id?: string }) {
   const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -114,7 +114,7 @@ export function PageMotion({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div ref={root} className="page-motion">
+    <div ref={root} id={id} className="page-motion">
       {children}
     </div>
   );

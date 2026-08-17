@@ -127,6 +127,10 @@ const COPY = {
     langGroup: "Language",
     progress: "answered",
     pending: "—",
+    storageBlockedTitle: "Can't save this survey",
+    storageBlocked:
+      "This browser is blocking local storage, so ratings can't be saved. Allow storage for this site, then reload.",
+    brandAria: "Digital Team portfolio",
     radarTitle: "Skill profile",
     radarHint: "Average score per group (0–5). The chart updates as you rate.",
     radarEmpty: "Rate skills to plot the 7 groups",
@@ -184,6 +188,10 @@ const COPY = {
     langGroup: "Ngôn ngữ",
     progress: "đã trả lời",
     pending: "—",
+    storageBlockedTitle: "Không lưu được khảo sát",
+    storageBlocked:
+      "Trình duyệt đang chặn bộ nhớ cục bộ nên không lưu được điểm. Cho phép lưu trữ cho trang này, rồi tải lại.",
+    brandAria: "Portfolio Digital Team",
     radarTitle: "Hồ sơ kỹ năng",
     radarHint: "Điểm trung bình từng nhóm (0–5). Biểu đồ cập nhật khi bạn chấm.",
     radarEmpty: "Chấm điểm để vẽ 7 nhóm kỹ năng",
@@ -226,6 +234,8 @@ function emptyProfile(): Profile {
 type SurveyDraft = { profile: Profile; answers: Answers };
 
 const emptyDraft = (): SurveyDraft => ({ profile: emptyProfile(), answers: {} });
+/** Stable snapshot for SSR and for when localStorage throws — React 19 forbids a new object each getSnapshot. */
+const EMPTY_DRAFT: SurveyDraft = emptyDraft();
 const draftListeners = new Set<() => void>();
 let draftCache: SurveyDraft | null = null;
 let draftRaw: string | null = null;
@@ -236,7 +246,7 @@ function subscribeDraft(listener: () => void) {
 }
 
 function parseDraft(raw: string | null): SurveyDraft {
-  if (!raw) return emptyDraft();
+  if (!raw) return EMPTY_DRAFT;
   try {
     const saved = JSON.parse(raw) as { profile?: Profile; answers?: Answers };
     return {
@@ -244,12 +254,29 @@ function parseDraft(raw: string | null): SurveyDraft {
       answers: saved.answers ?? {},
     };
   } catch {
-    return emptyDraft();
+    return EMPTY_DRAFT;
+  }
+}
+
+function probeStorage(): boolean {
+  try {
+    const probe = `${STORAGE_KEY}:probe`;
+    localStorage.setItem(probe, "1");
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
   }
 }
 
 function getDraftSnapshot(): SurveyDraft {
-  const raw = localStorage.getItem(STORAGE_KEY);
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(STORAGE_KEY);
+  } catch {
+    if (!draftCache) draftCache = EMPTY_DRAFT;
+    return draftCache;
+  }
   if (raw === draftRaw && draftCache) return draftCache;
   draftRaw = raw;
   draftCache = parseDraft(raw);
@@ -258,14 +285,18 @@ function getDraftSnapshot(): SurveyDraft {
 
 function writeDraft(next: SurveyDraft, locale: Locale) {
   const raw = JSON.stringify({ locale, profile: next.profile, answers: next.answers });
-  localStorage.setItem(STORAGE_KEY, raw);
+  try {
+    localStorage.setItem(STORAGE_KEY, raw);
+  } catch {
+    return;
+  }
   draftRaw = raw;
   draftCache = next;
   for (const listener of draftListeners) listener();
 }
 
 function getServerDraft(): SurveyDraft {
-  return emptyDraft();
+  return EMPTY_DRAFT;
 }
 
 function groupTone(ratio: number): EvalTone {
@@ -302,6 +333,8 @@ export function SkillsSurveyForm() {
   const locale = useSyncExternalStore(subscribeLocale, readLocale, getServerLocale);
   const draft = useSyncExternalStore(subscribeDraft, getDraftSnapshot, getServerDraft);
   const [tip, setTip] = useState<{ title: string; desc: string; x: number; y: number; fill: string } | null>(null);
+  const [storageOk, setStorageOk] = useState(true);
+  const blocked = !storageOk;
 
   const profile = draft.profile;
   const answers = draft.answers;
@@ -311,12 +344,17 @@ export function SkillsSurveyForm() {
     document.documentElement.lang = locale;
   }, [locale]);
 
+  useEffect(() => {
+    setStorageOk(probeStorage());
+  }, []);
+
   function setLocale(next: Locale) {
     writeLocale(next);
     writeDraft(draft, next);
   }
 
   function setProfile(next: Profile) {
+    if (blocked) return;
     writeDraft({ profile: next, answers }, locale);
   }
 
@@ -353,19 +391,20 @@ export function SkillsSurveyForm() {
     const max = allSkills.length * 5;
     const achieved = Object.values(answers).reduce((sum, value) => sum + value, 0);
     const ratio = max === 0 ? 0 : achieved / max;
-    const ranked = [...scores].sort((a, b) => b.ratio - a.ratio);
+    const ranked = scores.filter((item) => item.answered > 0).sort((a, b) => b.ratio - a.ratio);
     return {
       max,
       achieved,
       ratio,
       percent: Math.round(ratio * 100),
       eval: overallBand(ratio),
-      strongest: answeredCount ? ranked[0] : null,
-      lowest: answeredCount ? ranked[ranked.length - 1] : null,
+      strongest: ranked[0] ?? null,
+      lowest: ranked.length ? ranked[ranked.length - 1] : null,
     };
-  }, [answers, scores, answeredCount]);
+  }, [answers, scores]);
 
   function setScore(id: string, score: number) {
+    if (blocked) return;
     setAnswers((current) => {
       const next = { ...current };
       if (next[id] === score) delete next[id];
@@ -398,6 +437,7 @@ export function SkillsSurveyForm() {
   }
 
   function downloadJson() {
+    if (blocked) return;
     const who = profile.name.trim().replace(/\s+/g, "-") || "draft";
     const blob = new Blob(
       [JSON.stringify({ locale, profile, answers }, null, 2)],
@@ -412,17 +452,22 @@ export function SkillsSurveyForm() {
   }
 
   function clearAnswers() {
+    if (blocked) return;
     if (!window.confirm(t.confirmReset)) return;
-    localStorage.removeItem(STORAGE_KEY);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      return;
+    }
     draftRaw = null;
-    draftCache = emptyDraft();
+    draftCache = EMPTY_DRAFT;
     for (const listener of draftListeners) listener();
   }
 
   return (
-    <main className="skills-survey">
+    <main className={blocked ? "skills-survey is-blocked" : "skills-survey"}>
       <header className="skills-survey-bar">
-        <a className="skills-survey-brand" href="/" aria-label="Digital Team portfolio">
+        <a className="skills-survey-brand" href="/" aria-label={t.brandAria}>
           <img src="/images/bkw-dcm-logo.svg" alt="" />
           <span>{t.brand}</span>
         </a>
@@ -440,6 +485,13 @@ export function SkillsSurveyForm() {
           </div>
         </div>
       </header>
+
+      {blocked ? (
+        <div className="skills-survey-blocked" role="alert">
+          <strong>{t.storageBlockedTitle}</strong>
+          <p>{t.storageBlocked}</p>
+        </div>
+      ) : null}
 
       <div className="matrix-scroll" onScroll={() => setTip(null)}>
         <section className="matrix">
@@ -468,7 +520,7 @@ export function SkillsSurveyForm() {
               ))}
             </div>
 
-            <div className="matrix-id">
+            <fieldset className="matrix-id" disabled={blocked}>
               <label>
                 {t.name}
                 <input
@@ -476,6 +528,7 @@ export function SkillsSurveyForm() {
                   value={profile.name}
                   onChange={(event) => setProfile({ ...profile, name: event.target.value })}
                   autoComplete="name"
+                  disabled={blocked}
                 />
               </label>
               <label>
@@ -485,6 +538,7 @@ export function SkillsSurveyForm() {
                   value={profile.role}
                   onChange={(event) => setProfile({ ...profile, role: event.target.value })}
                   placeholder={t.rolePlaceholder}
+                  disabled={blocked}
                 />
               </label>
               <label>
@@ -493,6 +547,7 @@ export function SkillsSurveyForm() {
                   type="text"
                   value={profile.teamLead}
                   onChange={(event) => setProfile({ ...profile, teamLead: event.target.value })}
+                  disabled={blocked}
                 />
               </label>
               <label>
@@ -501,6 +556,7 @@ export function SkillsSurveyForm() {
                   type="date"
                   value={profile.date}
                   onChange={(event) => setProfile({ ...profile, date: event.target.value })}
+                  disabled={blocked}
                 />
               </label>
               <p className="matrix-id-cert">
@@ -511,6 +567,7 @@ export function SkillsSurveyForm() {
                   type="checkbox"
                   checked={profile.acu}
                   onChange={(event) => setProfile({ ...profile, acu: event.target.checked })}
+                  disabled={blocked}
                 />
                 {t.acu}
               </label>
@@ -519,6 +576,7 @@ export function SkillsSurveyForm() {
                   type="checkbox"
                   checked={profile.acp}
                   onChange={(event) => setProfile({ ...profile, acp: event.target.checked })}
+                  disabled={blocked}
                 />
                 {t.acp}
               </label>
@@ -529,9 +587,10 @@ export function SkillsSurveyForm() {
                   value={profile.other}
                   placeholder={t.otherPlaceholder}
                   onChange={(event) => setProfile({ ...profile, other: event.target.value })}
+                  disabled={blocked}
                 />
               </label>
-            </div>
+            </fieldset>
           </div>
 
           <table className="matrix-table">
@@ -588,6 +647,7 @@ export function SkillsSurveyForm() {
                               style={filled ? { background: item.fill, color: item.ink } : undefined}
                               aria-pressed={selected}
                               aria-label={`${skillLabel(skill, locale)}: ${item.score} · ${label}. ${desc}`}
+                              disabled={blocked}
                               onPointerEnter={(event) => showScaleTip(event.currentTarget, item)}
                               onPointerLeave={() => setTip(null)}
                               onFocus={(event) => showScaleTip(event.currentTarget, item)}
@@ -668,6 +728,7 @@ export function SkillsSurveyForm() {
                               }
                               aria-pressed={selected}
                               aria-label={`${label}: ${item.score} · ${locale === "vi" ? item.vi : item.en}`}
+                              disabled={blocked}
                               onClick={() => setScore(skill.id, item.score)}
                             >
                               {item.score}
@@ -746,10 +807,10 @@ export function SkillsSurveyForm() {
               </span>
             </p>
             <div className="matrix-actions">
-              <button type="button" className="button button-ghost-dark" onClick={clearAnswers}>
+              <button type="button" className="button button-ghost-dark" onClick={clearAnswers} disabled={blocked}>
                 {t.reset}
               </button>
-              <button type="button" className="button button-ghost-dark" onClick={downloadJson}>
+              <button type="button" className="button button-ghost-dark" onClick={downloadJson} disabled={blocked}>
                 {t.download}
               </button>
               <button type="button" className="button button-primary" onClick={printPdf}>

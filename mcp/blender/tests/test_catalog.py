@@ -29,12 +29,16 @@ def test_glb_name_normalizes():
     assert validate_glb_name("Desk-Lamp.glb") == "desk-lamp.glb"
 
 
-def test_code_blocks_network():
+def test_code_size_limit():
     try:
-        validate_code("import socket\nroot = 1")
+        validate_code("x" * 200_001)
     except ValueError:
         return
-    raise AssertionError("expected block")
+    raise AssertionError("expected size block")
+
+
+def test_code_allows_trusted_tokens():
+    assert validate_code("import socket\nroot = 1") == "import socket\nroot = 1"
 
 
 def test_web_snippet():

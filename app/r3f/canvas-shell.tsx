@@ -2,14 +2,15 @@
 
 import { Canvas } from "@react-three/fiber";
 import {
+  Component,
   Suspense,
   useCallback,
-  useEffect,
   useRef,
   useState,
+  type ErrorInfo,
   type ReactNode,
 } from "react";
-import { useInViewOnce, usePrefersReducedMotion } from "./hooks";
+import { probeWebGL, useInViewOnce, usePrefersReducedMotion } from "./hooks";
 
 type CanvasShellProps = {
   className?: string;
@@ -33,26 +34,24 @@ type CanvasShellProps = {
   "aria-label"?: string;
 };
 
-function WebGlGate({
-  onFail,
-  children,
-}: {
-  onFail: () => void;
-  children: ReactNode;
-}) {
-  useEffect(() => {
-    try {
-      const canvas = document.createElement("canvas");
-      const ok = !!(
-        canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
-      );
-      if (!ok) onFail();
-    } catch {
-      onFail();
-    }
-  }, [onFail]);
+class WebGlErrorBoundary extends Component<
+  { onError: () => void; children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
 
-  return children;
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(_error: Error, _info: ErrorInfo) {
+    this.props.onError();
+  }
+
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
 }
 
 export function CanvasShell({
@@ -74,8 +73,9 @@ export function CanvasShell({
   const reducedMotion = usePrefersReducedMotion();
   const [failed, setFailed] = useState(false);
   const onFail = useCallback(() => setFailed(true), []);
+  const allowWebGL = !reducedMotion && !failed && probeWebGL();
 
-  if (reducedMotion || failed) {
+  if (!allowWebGL) {
     return (
       <div className={className} aria-label={ariaLabel}>
         {fallback}
@@ -86,7 +86,7 @@ export function CanvasShell({
   return (
     <div ref={rootRef} className={className} role={inView ? role : undefined} aria-label={ariaLabel}>
       {inView ? (
-        <WebGlGate onFail={onFail}>
+        <WebGlErrorBoundary onError={onFail}>
           <Canvas
             dpr={dpr}
             camera={camera}
@@ -100,7 +100,7 @@ export function CanvasShell({
           >
             <Suspense fallback={null}>{children}</Suspense>
           </Canvas>
-        </WebGlGate>
+        </WebGlErrorBoundary>
       ) : (
         fallback
       )}
